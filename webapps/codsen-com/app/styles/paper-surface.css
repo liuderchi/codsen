@@ -1,0 +1,99 @@
+/* Paper Surface layout */
+/* used on "normal" web pages, sets the outermost div container */
+/* to look like a paper sheet in the center of the screen */
+/* also <header> on desktop layout is spaciously laid out */
+/* ----------------------------------------------------------------------------- */
+
+.paper-surface .remix-app {
+  margin: 0 auto;
+  max-width: 128rem;
+  position: relative;
+}
+
+.paper-surface .remix-app__container {
+  padding: var(--c-size-semantic-gutter);
+}
+
+.paper-surface .remix-app__header {
+  text-align: center;
+}
+
+.paper-surface .remix-app__header-home-link-container {
+  text-align: center;
+  z-index: -1;
+}
+
+@media (max-width: 1100px) {
+  .paper-surface .remix-app__header-home-link {
+    display: block;
+    clear: both;
+    top: -1rem;
+    position: relative;
+  }
+}
+
+.paper-surface .remix-app__header-home-link {
+  margin-left: 7rem;
+}
+
+.paper-surface .remix-app__nav ul {
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.paper-surface .remix-app__nav li {
+  display: inline;
+}
+
+.paper-surface .remix-app__nav a {
+  color: var(--c-color-semantic-link-default);
+  padding: 1.6rem;
+  text-decoration: none;
+  font-style: italic;
+  display: inline-block;
+}
+
+.paper-surface .remix-app__nav a.active span {
+  border-bottom: 0.5rem solid var(--c-color-semantic-codsen-roundel-bg);
+}
+
+.paper-surface .remix-app__nav a:hover span {
+  border-bottom: 0.5rem solid var(--c-color-semantic-link-hover-bg);
+}
+
+.paper-surface .remix-app__header-global-nav {
+  float: right;
+  /* compensate for the link padding: */
+  position: relative;
+  top: calc(-1 * var(--c-size-semantic-gutter));
+  right: calc(-0.5 * var(--c-size-semantic-gutter));
+}
+
+@media (min-width: 1100px) {
+  .paper-surface .remix-app__header-global-nav {
+    position: absolute;
+    right: var(--c-size-semantic-gutter);
+    top: 0;
+  }
+}
+
+.paper-surface .remix-app__theme-toggle {
+  float: left;
+}
+
+.paper-surface .remix-app__theme-toggle > div {
+  display: inline;
+}
+
+@media (min-width: 1100px) {
+  .paper-surface .remix-app__theme-toggle {
+    position: absolute;
+    left: var(--c-size-semantic-gutter);
+    top: var(--c-size-semantic-gutter);
+  }
+}
+
+.global-nav-login .remix-app__header-content {
+  padding-bottom: 2rem;
+}

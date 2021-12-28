@@ -1,0 +1,104 @@
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; /* 1rem = 10px */
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+}
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+:-moz-focusring {
+  outline: auto;
+}
+
+:focus {
+  outline: var(--c-color-links) solid 0.2rem;
+  outline-offset: 0.2rem;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--c-color-semantic-desk);
+  color: var(--c-color-semantic-text);
+  /* transition: color 350ms ease 0s, background 350ms ease 0s; */
+}
+
+body {
+  @media (min-width: 530px) {
+    padding: var(--c-size-semantic-gutter);
+  }
+  font-family: var(--c-font-body);
+  font-size: 1.8rem;
+  line-height: 3.1rem;
+}
+
+.remix-app {
+  background: var(--c-color-semantic-paper);
+}
+
+.remix-app__main a,
+.remix-app__footer a {
+  color: var(--c-color-semantic-link-default);
+  text-decoration: underline;
+  text-decoration-color: var(--c-color-semantic-link-text-decoration);
+}
+
+.remix-app__main a:hover {
+  color: var(--c-color-semantic-link-hover-fg);
+  background: var(--c-color-semantic-link-hover-bg);
+  text-decoration: none;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  background-color: var(--c-color-semantic-border);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+hr.mt0 {
+  margin-top: 0;
+}
+
+input:where([type="text"]),
+input:where([type="search"]) {
+  display: block;
+  border: 1px solid var(--c-color-semantic-border);
+  width: 100%;
+  font: inherit;
+  line-height: 1;
+  height: calc(1ch + 1.5em);
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  background-color: hsl(0 0% 100% / 20%);
+  color: var(--c-color-semantic-text);
+}
+
+/* dark theme toggle */
+/* ----------------------------------------------------------------------------- */
+
+/* By default, dark theme is loaded initially. */
+
+/* If automatic mode (system's preferred theme) is a light theme */
+@media (prefers-color-scheme: light) {
+  /* ensure not to activate when "dark" is explicitly toggled on */
+  :root:not([data-theme="dark"]) {
+    @import "../../node_modules/@codsen/design-tokens/dist/codsen-light/css/variables/color-semantic-rows.css";
+  }
+}
+
+/* If "light" theme has been manually enabled */
+:root[data-theme="light"] {
+  @import "../../node_modules/@codsen/design-tokens/dist/codsen-light/css/variables/color-semantic-rows.css";
+}

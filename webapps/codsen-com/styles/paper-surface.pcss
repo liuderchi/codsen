@@ -1,0 +1,90 @@
+/* Paper Surface layout */
+/* used on "normal" web pages, sets the outermost div container */
+/* to look like a paper sheet in the center of the screen */
+/* also <header> on desktop layout is spaciously laid out */
+/* ----------------------------------------------------------------------------- */
+
+.paper-surface {
+  .remix-app {
+    margin: 0 auto;
+    max-width: 128rem;
+    padding: var(--c-size-semantic-gutter);
+    position: relative;
+  }
+
+  .remix-app__header {
+    text-align: center;
+  }
+
+  .remix-app__header-home-link-container {
+    text-align: center;
+    z-index: -1;
+  }
+
+  .remix-app__header-home-link {
+    @media (max-width: 1100px) {
+      display: block;
+      clear: both;
+      top: -1rem;
+      position: relative;
+    }
+    margin-left: 7rem;
+  }
+
+  .remix-app__nav {
+    ul {
+      list-style-type: none;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    li {
+      display: inline;
+    }
+
+    a {
+      color: var(--c-color-semantic-link-default);
+      padding: 1.6rem;
+      text-decoration: none;
+      font-style: italic;
+      display: inline-block;
+      &.active span {
+        border-bottom: 0.5rem solid var(--c-color-semantic-codsen-roundel-bg);
+      }
+      &:hover span {
+        border-bottom: 0.5rem solid var(--c-color-semantic-link-hover-bg);
+      }
+    }
+  }
+
+  .remix-app__header-global-nav {
+    float: right;
+    /* compensate for the link padding: */
+    position: relative;
+    top: calc(-1 * var(--c-size-semantic-gutter));
+    right: calc(-0.5 * var(--c-size-semantic-gutter));
+    @media (min-width: 1100px) {
+      position: absolute;
+      right: var(--c-size-semantic-gutter);
+      top: 0;
+    }
+  }
+
+  .remix-app__theme-toggle {
+    float: left;
+    > div {
+      display: inline;
+    }
+    @media (min-width: 1100px) {
+      position: absolute;
+      left: var(--c-size-semantic-gutter);
+      top: var(--c-size-semantic-gutter);
+    }
+  }
+}
+
+.remix-app__header-content {
+  .global-nav-login & {
+    padding-bottom: 2rem;
+  }
+}

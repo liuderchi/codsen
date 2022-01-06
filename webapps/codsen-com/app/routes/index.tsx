@@ -10,7 +10,7 @@ export default function IndexRoute() {
     <div>
       <h1>Home</h1>
       <p>
-        Here&apos;s a <Link to="/">link</Link>
+        <Link to="/os/play/json-variables">json-variables playground</Link>
       </p>
     </div>
   );

@@ -11,8 +11,12 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": [
+        "./app/*",
+        "../../data/packages.json",
+        "../../data/programClassification"]
     },
+    "composite": true,
 
     // Remix takes care of building everything in `remix build`.
     "noEmit": true

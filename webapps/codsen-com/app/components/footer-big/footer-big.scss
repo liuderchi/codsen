@@ -1,0 +1,42 @@
+.footer-big {
+  .remix-app__footer-content {
+    text-align: center;
+  }
+
+  padding: 0 2rem 1rem;
+
+  @media (min-width: 700px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    section {
+      flex: 1;
+      margin: 1.8rem 4rem 1rem;
+      max-width: 42%;
+    }
+  }
+}
+
+/* ----------------------------------------------------------------------------- */
+
+/* default, dark theme */
+/* .footer-big .h4 {
+  opacity: 1;
+} */
+
+/* overrides for light theme */
+/* @media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    .footer-big .h4 {
+      opacity: 0.7;
+    }
+  }
+}
+:root[data-theme="light"] {
+  .footer-big .h4 {
+    opacity: 0.7;
+  }
+} */
+
+/* ----------------------------------------------------------------------------- */

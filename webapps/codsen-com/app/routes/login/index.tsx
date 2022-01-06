@@ -1,4 +1,10 @@
-import { Link } from "remix";
+import { LinksFunction } from "remix";
+
+// import stylesUrl from "~/styles/page-login.css";
+
+// export const links: LinksFunction = () => {
+//   return [{ rel: "stylesheet", href: stylesUrl }];
+// };
 
 export default function IndexRoute() {
   return (

@@ -1,14 +1,14 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-package: Package's name
+package: Package's or web app's name
 title: ""
 labels: ""
 assignees: revelt
 ---
 
-**Package's name**
-Which package from the monorepo is it for?
+**Package's or web app's name**
+Which package or web app from the monorepo is it for?
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

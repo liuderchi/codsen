@@ -1,0 +1,561 @@
+/* THE PAPER SURFACE LAYOUT */
+
+@import "@codsen/design-tokens/dist/codsen-light/css/variables/color-semantic-with-media";
+
+$narrow: 425px;
+$mid: 550px;
+$thousand: 1000px;
+$wide: 1200px;
+$max: 1280px;
+
+/* ----------------------------------------------------------------------------- */
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; /* 1rem = 10px */
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+}
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+:-moz-focusring {
+  outline: auto;
+}
+
+:focus {
+  outline: var(--c-color-links) solid 0.2rem;
+  outline-offset: 0.2rem;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--c-color-semantic-desk);
+  color: var(--c-color-semantic-text);
+  /* transition: color 350ms ease 0s, background 350ms ease 0s; */
+}
+
+body {
+  font-size: 1.8rem;
+  line-height: 3.1rem;
+}
+
+hr {
+  display: block;
+  width: 100%;
+  height: 1px;
+  border: 0;
+  background-color: var(--c-color-semantic-border);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+hr.mt0 {
+  margin-top: 0;
+}
+hr.mb0 {
+  margin-bottom: 0;
+}
+
+input:where([type="text"]),
+input:where([type="search"]) {
+  display: block;
+  border: 1px solid var(--c-color-semantic-border);
+  width: 100%;
+  font: inherit;
+  line-height: 1;
+  height: calc(1ch + 1.5em);
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  background-color: hsl(0 0% 100% / 20%);
+  color: var(--c-color-semantic-text);
+}
+
+.separator {
+  margin: 6rem 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  svg {
+    margin: 0 1rem;
+  }
+}
+
+.emoji {
+  filter: brightness(0.7);
+}
+
+.ext-link {
+  position: relative;
+  top: -1rem;
+  cursor: help;
+}
+
+/* General styling. */
+/* ----------------------------------------------------------------------------- */
+
+html {
+  font-family: "Inter", sans-serif; /* TODO - tokens */
+  scroll-behavior: smooth;
+}
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @media (min-width: 530px) {
+    padding: var(--c-size-semantic-gutter);
+
+    &.maxWide {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.paper-surface:not(.maxWide) {
+  .remix-app {
+    max-width: 128rem;
+  }
+}
+
+.remix-app__container {
+  background: var(--c-color-semantic-paper);
+  padding: var(--c-size-semantic-gutter);
+}
+
+/* SVG */
+/* ----------------------------------------------------------------------------- */
+
+.svg-outline {
+  fill: var(--c-color-semantic-svg-outline);
+}
+
+.svg-yellow {
+  fill: var(--c-color-semantic-svg-yellow);
+}
+
+.svg-green {
+  fill: var(--c-color-semantic-svg-green);
+}
+
+.svg-blue {
+  fill: var(--c-color-semantic-svg-blue);
+}
+
+.svg-black-fill {
+  fill: var(--c-color-semantic-svg-black-fill);
+}
+
+.svg-black-stroke {
+  fill: var(--c-color-semantic-svg-black-stroke);
+}
+
+/* Links styling first. */
+/* ----------------------------------------------------------------------------- */
+
+.remix-app__main {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    position: relative;
+    // correction for anchor headings, set them back to normal color
+    > a {
+      color: var(--c-color-semantic-text);
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      &:hover:before {
+        position: absolute;
+        left: -0.65em;
+        content: "#";
+        opacity: 0.25;
+      }
+    }
+
+    // for totals
+    sup {
+      font-weight: normal;
+      font-size: 1.5rem;
+      letter-spacing: normal;
+      line-height: 1;
+      position: relative;
+
+      @media (min-width: $mid) {
+        top: -2em;
+        right: 2.5em;
+      }
+      @media (min-width: $thousand) {
+        top: -3.5em;
+        right: 3em;
+      }
+
+      cursor: help;
+    }
+  }
+  a {
+    color: var(--c-color-semantic-link-default);
+  }
+}
+
+.remix-app__footer a {
+  color: var(--c-color-semantic-codsen-footer-link);
+}
+
+.remix-app__main a,
+.remix-app__footer a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.back-to-top {
+  opacity: 0.66;
+  margin-top: 2rem;
+  a {
+    color: var(--c-color-semantic-text);
+    padding: 2rem;
+    position: relative;
+    right: 2rem;
+  }
+}
+
+/* The rest follows. */
+/* ----------------------------------------------------------------------------- */
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.remix-app {
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.remix-app__container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+}
+
+.remix-app__header-content {
+  position: relative;
+}
+
+.remix-app__main {
+  flex: 1;
+  @media (min-width: $mid) {
+    padding: 1.5rem;
+  }
+}
+
+.remix-app__header {
+  text-align: center;
+  max-width: 1250px;
+}
+
+.remix-app__header-home-link-container {
+  text-align: center;
+  z-index: -1;
+}
+
+.remix-app__header-home-link {
+  @media (max-width: 1200px) {
+    display: block;
+    clear: both;
+    top: -1rem;
+    position: relative;
+  }
+  margin-left: 7rem;
+}
+
+.remix-app__nav {
+  ul {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  li {
+    display: inline;
+  }
+
+  a {
+    color: var(--c-color-semantic-codsen-nav);
+    padding: 1.6rem;
+    text-decoration: none;
+    font-style: italic;
+    display: inline-block;
+    &.active span {
+      border-bottom: 0.5rem solid var(--c-color-semantic-codsen-roundel-bg);
+    }
+    &:hover span {
+      border-bottom: 0.5rem solid var(--c-color-semantic-link-hover-bg);
+    }
+  }
+
+  .ext-link {
+    margin-left: 0.3rem;
+  }
+}
+
+.remix-app__header-global-nav {
+  float: right;
+  /* compensate for the link padding: */
+  position: relative;
+  top: calc(-1 * var(--c-size-semantic-gutter));
+  right: calc(-0.5 * var(--c-size-semantic-gutter));
+  @media (min-width: 1200px) {
+    position: absolute;
+  }
+}
+
+.remix-app__theme-toggle {
+  float: left;
+  > div {
+    display: inline;
+  }
+  @media (min-width: 1100px) {
+    position: absolute;
+  }
+}
+
+/* Fonts */
+/* check out https://www.gridlover.net/try */
+/* ----------------------------------------------------------------------------- */
+
+h1,
+.h1 {
+  letter-spacing: -0.05em;
+  font-weight: 700;
+
+  font-size: 5.82rem; /* 0.6x */
+  line-height: 1;
+  margin-top: 7.8rem;
+  margin-bottom: 7.8rem;
+  hyphens: none;
+
+  @media (min-width: $mid) {
+    font-size: 7.275rem; /* 0.75x */
+  }
+  @media (min-width: $thousand) {
+    font-size: 9.7rem;
+  }
+
+  .layout-page &,
+  .layout-list & {
+    margin-top: 7.8rem;
+    margin-bottom: 3.9rem;
+  }
+
+  .page-articles-home & {
+    /* there's pagination under h1 in /articles/ so reduce the gap: */
+    margin-bottom: 1.9rem;
+  }
+}
+h2,
+.h2 {
+  letter-spacing: -0.04em;
+  font-size: 3.6rem; /* 0.6x */
+  line-height: 1;
+
+  margin-top: 3.9rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: $mid) {
+    margin-bottom: 3rem;
+    font-size: 4.5rem; /* 0.75x */
+  }
+
+  @media (min-width: $thousand) {
+    margin-bottom: 3.9rem;
+    font-size: 6rem;
+    /* line-height: 7.8rem; */
+  }
+
+  font-weight: bold;
+}
+h3,
+.h3 {
+  letter-spacing: -0.04em;
+  font-size: 3.7rem;
+  line-height: 3.9rem;
+  margin-top: 3.9rem;
+  margin-bottom: 3.9rem;
+  font-weight: bold;
+}
+h4,
+.h4 {
+  font-size: 2.3rem;
+  line-height: 3.9rem;
+  margin-top: 2.1rem; /* was 3.9 */
+  margin-bottom: 0;
+}
+h5,
+.h5 {
+  font-size: 2.3rem;
+  line-height: 3.9rem;
+  margin-top: 3.9rem;
+  margin-bottom: 0;
+}
+p,
+ul,
+ol,
+pre,
+table,
+blockquote {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+sub,
+sup {
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+
+/* Login page-specific */
+/* ----------------------------------------------------------------------------- */
+
+.page-login {
+  .remix-app__main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .remix-app__header-content {
+    padding-bottom: 2rem;
+  }
+}
+
+.page-login {
+  background-image: url("/images/login-bg-key1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+/* Open Source root page-specific */
+/* ----------------------------------------------------------------------------- */
+
+@media (min-width: 700px) {
+  .content-row__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .content-row__description {
+    width: 50%;
+    padding-right: 2rem;
+  }
+  .content-row__packages {
+    width: 50%;
+  }
+}
+
+@media (min-width: $thousand) {
+  .content-row__description {
+    width: 40%;
+    padding-right: 0;
+  }
+}
+
+.content-row__package {
+  a {
+    display: block;
+    .emoji {
+      display: inline-block;
+    }
+    color: var(--c-color-semantic-text);
+  }
+  .content-row__name {
+    color: var(--c-color-semantic-link-default);
+  }
+  .content-row__package__description {
+    opacity: 0.75;
+  }
+  a:hover {
+    text-decoration: none;
+    .content-row__name {
+      text-decoration: underline;
+    }
+    .emoji {
+      transition: transform 0.4s ease-in-out;
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.content-row__package__description {
+  font-size: 1.4rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+/* Theme-specific overrides  */
+/* ----------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    .emoji {
+      filter: none;
+    }
+  }
+}
+
+:root[data-theme="light"] {
+  .emoji {
+    filter: none;
+  }
+}
+
+/* ETC */
+/* ----------------------------------------------------------------------------- */

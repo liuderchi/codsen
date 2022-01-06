@@ -21,20 +21,30 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import { useMatch, useResolvedPath, useLocation } from "react-router-dom";
-import { CodsenLogo } from "./components/codsen-logo";
+import { pathNameToCSSClass } from "./utils/pathNameToCSSClass";
+
+import { FooterBig } from "~/components/footer-big/footer-big";
+import footerBigStylesUrl from "~/components/footer-big/footer-big.css";
+
+import { FooterSmall } from "~/components/footer-small/footer-small";
+import footerSmallStylesUrl from "~/components/footer-small/footer-small.css";
+
+import { CodsenLogo } from "~/components/svg/codsen-logo";
+import { IconNewTab } from "~/components/svg/icon-new-tab";
 
 // -----------------------------------------------------------------------------
 
-import globalStylesUrl from "~/styles/global-styles.css";
 import darkColorVariablesUrl from "@codsen/design-tokens/dist/codsen-dark/css/variables/color-semantic.css";
 import darkSizeVariablesUrl from "@codsen/design-tokens/dist/codsen-dark/css/variables/size-semantic.css";
 import paperSurfaceStylesUrl from "~/styles/paper-surface.css";
+
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: darkColorVariablesUrl },
     { rel: "stylesheet", href: darkSizeVariablesUrl },
-    { rel: "stylesheet", href: globalStylesUrl },
     { rel: "stylesheet", href: paperSurfaceStylesUrl },
+    { rel: "stylesheet", href: footerBigStylesUrl },
+    { rel: "stylesheet", href: footerSmallStylesUrl },
   ];
 };
 
@@ -42,24 +52,12 @@ export const links: LinksFunction = () => {
 
 import { unencryptedSession } from "./sessions.server";
 export const action: ActionFunction = async ({ request }) => {
-  console.log(`046 ActionFunction()`);
   let session = await unencryptedSession.getSession(
     request.headers.get("Cookie")
   );
-
   let formData = new URLSearchParams(await request.text());
-
   let theme = formData.get("theme") || "auto";
-  console.log(
-    `055 ${`\u001b[${33}m${`theme`}\u001b[${39}m`} = ${JSON.stringify(
-      theme,
-      null,
-      4
-    )}`
-  );
   session.set("theme", theme);
-
-  console.log(`063 ActionFunction: FINAL RETURN`);
   return json(null, {
     headers: {
       "Set-Cookie": await unencryptedSession.commitSession(session),
@@ -68,18 +66,10 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  console.log(`072 LoaderFunction()`);
   let session = await unencryptedSession.getSession(
     request.headers.get("Cookie")
   );
   let theme = session.get("theme") || "auto";
-  console.log(
-    `078 root.tsx ${`\u001b[${33}m${`theme`}\u001b[${39}m`} = ${JSON.stringify(
-      theme,
-      null,
-      4
-    )}`
-  );
   return json({ theme });
 };
 
@@ -92,13 +82,13 @@ function Document({
   children,
   title,
   selectedTheme = "auto",
+  maxWide = false,
 }: {
   children: React.ReactNode;
   title?: string;
-  selectedTheme: Theme;
+  selectedTheme?: Theme;
+  maxWide?: boolean;
 }) {
-  // playgrounds should have full-screen UI
-  let paperSurface = !useMatch({ path: useResolvedPath("/play").pathname });
   return (
     <html lang="en" data-theme={selectedTheme}>
       <head>
@@ -108,13 +98,72 @@ function Document({
         <Meta />
         <Links />
       </head>
-      <body {...(paperSurface ? { className: "paper-surface" } : {})}>
+      <body
+        id="page-top"
+        className={`paper-surface${maxWide ? " maxWide" : ""}`}
+      >
         {children}
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
+  );
+}
+
+// https://remix.run/docs/en/v1/api/conventions#errorboundary
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.error(error);
+  return (
+    <Document title="Error!">
+      <Layout>
+        <div>
+          <h1>There was an error</h1>
+          <p>{error.message}</p>
+          <hr />
+          <p>
+            Hey, developer, you should replace this with what you want your
+            users to see.
+          </p>
+        </div>
+      </Layout>
+    </Document>
+  );
+}
+
+// https://remix.run/docs/en/v1/api/conventions#catchboundary
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  let message;
+  switch (caught.status) {
+    case 401:
+      message = (
+        <p>
+          Oops! Looks like you tried to visit a page that you do not have access
+          to.
+        </p>
+      );
+      break;
+    case 404:
+      message = (
+        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
+      );
+      break;
+
+    default:
+      throw new Error(caught.data || caught.statusText);
+  }
+
+  return (
+    <Document title={`${caught.status} ${caught.statusText}`}>
+      <Layout hideThemeToggle>
+        <h1>
+          {caught.status}: {caught.statusText}
+        </h1>
+        {message}
+      </Layout>
+    </Document>
   );
 }
 
@@ -143,9 +192,13 @@ function NavLink({ children, to, globalNavPath, ...props }: NavLinkInterface) {
 function Layout({
   children,
   selectedTheme = "auto",
+  maxWide = false,
+  hideThemeToggle = false,
 }: {
   children: React.ReactNode;
-  selectedTheme: Theme;
+  selectedTheme?: Theme;
+  maxWide?: boolean;
+  hideThemeToggle?: boolean;
 }) {
   let formRef = useRef<HTMLFormElement>(null);
   let submit = useSubmit();
@@ -175,12 +228,18 @@ function Layout({
     globalNavClass = "global-nav-services";
   }
 
+  const FooterClassName = maxWide ? "footer-small" : "footer-big";
+
   return (
     <div className="remix-app">
-      <div className={`remix-app__container ${globalNavClass}`}>
+      <div
+        className={`remix-app__container ${globalNavClass} ${pathNameToCSSClass(
+          location.pathname
+        )}`}
+      >
         <header className="remix-app__header">
           <div className="container remix-app__header-content">
-            {selectedTheme && (
+            {!hideThemeToggle && (
               <Form
                 className="remix-app__theme-toggle"
                 ref={formRef}
@@ -224,13 +283,14 @@ function Layout({
                     Services
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <a href="https://github.com/codsen" target="_blank">
                     <span>
-                      GitHub<sup>*</sup>
+                      GitHub
+                      <IconNewTab />
                     </span>
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <NavLink to="/login" globalNavPath={globalNavPath}>
                     Login
@@ -256,7 +316,7 @@ function Layout({
                     <NavLink to="/os">Open Source</NavLink>
                   </li>
                   <li>
-                    <NavLink to="/blog">Blog</NavLink>
+                    <NavLink to="/articles">Articles</NavLink>
                   </li>
                   <li>
                     <NavLink to="/about">About</NavLink>
@@ -281,15 +341,13 @@ function Layout({
             )}
           </div>
         </header>
-        <hr className="mt0" />
+        <hr className="mt0 mb0" />
         <div className="remix-app__main">
           <div className="container remix-app__main-content">{children}</div>
         </div>
       </div>
-      <footer className="remix-app__footer">
-        <div className="container remix-app__footer-content">
-          <p>&copy; You!</p>
-        </div>
+      <footer className={`remix-app__footer ${FooterClassName}`}>
+        {maxWide ? <FooterSmall /> : <FooterBig />}
       </footer>
     </div>
   );
@@ -297,9 +355,22 @@ function Layout({
 
 export default function App() {
   let { theme = "auto" } = useLoaderData();
+
+  // playgrounds should have full-screen UI
+  // let maxWide = useMatch({ path: useResolvedPath("/os/play").pathname });
+  let isOneOfPlayPages = !!useMatch({
+    path: "/os/play",
+    end: false,
+  });
+  let isPlayHomepage = !!useMatch({
+    path: "/os/play",
+    end: true,
+  });
+  let maxWide = isOneOfPlayPages && !isPlayHomepage;
+
   return (
-    <Document selectedTheme={theme}>
-      <Layout selectedTheme={theme}>
+    <Document selectedTheme={theme} maxWide={maxWide}>
+      <Layout selectedTheme={theme} maxWide={maxWide}>
         <Outlet />
       </Layout>
     </Document>

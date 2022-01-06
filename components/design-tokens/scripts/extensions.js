@@ -30,7 +30,15 @@ StyleDictionary.registerFormat({
   name: "css/variables-only",
   formatter: function({dictionary, options={}}) {
     const { outputReferences, indent } = options;
-    return `${trimLines(formattedVariables({format: 'css', dictionary, outputReferences}), {indent})}\n`
+    return `@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    ${trimLines(formattedVariables({format: 'css', dictionary, outputReferences}), {indent})}
+  }
+}
+
+:root[data-theme="light"] {
+  ${trimLines(formattedVariables({format: 'css', dictionary, outputReferences}), {indent})}
+}`
   },
 });
 

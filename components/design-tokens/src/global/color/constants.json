@@ -39,6 +39,12 @@
           "comment": "100%"
         }
       },
+      "link": {
+        "default": {
+          "value": "#0a6ada",
+          "comment": "85%"
+        }
+      },
       "text": {
         "value": "#17131f",
         "comment": "12%, violet tint, our special unique text colour"
@@ -107,6 +113,16 @@
         "default": {
           "value": "#bab3a4",
           "comment": "73%"
+        }
+      },
+      "link": {
+        "default": {
+          "value": "#4584cc",
+          "comment": "80%"
+        },
+        "darker": {
+          "value": "#346399",
+          "comment": "60%"
         }
       },
       "text": {

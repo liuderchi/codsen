@@ -8,7 +8,7 @@ const platforms = [
   "web/js",
   "web/json",
   "web/css",
-  // "web/scss",
+  "web/scss",
   // "styleguide",
   // "ios",
   // "android",
@@ -95,9 +95,10 @@ function getStyleDictionaryConfig(brand, platform) {
         prefix: namespace,
         files: [
           {
-            destination: "scss/theme.scss",
+            destination: `scss/variables/_space-${brand === "global" ? "constants" : "semantic"}.scss`,
             format: "scss/map-deep",
-            mapName: `${namespace}-${brand}`,
+            filter: (token) =>
+              (token.attributes.category === "space" && ((brand === "global" && token.attributes.type !== "semantic") || (brand !== "global" && token.attributes.type === "semantic")))
           },
         ],
       },
@@ -116,7 +117,7 @@ function getStyleDictionaryConfig(brand, platform) {
               ),
           }: undefined],
           ...[brand !== "global" ? {
-            destination: "css/variables/color-semantic-rows.css",
+            destination: "css/variables/color-semantic-with-media.css",
             format: "css/variables-only",
             "options": {
               "indent": 4 // make the indentation match
@@ -135,6 +136,12 @@ function getStyleDictionaryConfig(brand, platform) {
             format: "css/variables",
             filter: (token) =>
               (token.attributes.category === "size" && ((brand === "global" && token.attributes.type !== "semantic") || (brand !== "global" && token.attributes.type === "semantic")))
+          },
+          {
+            destination: `css/variables/space-${brand === "global" ? "constants" : "semantic"}.css`,
+            format: "css/variables",
+            filter: (token) =>
+              (token.attributes.category === "space" && ((brand === "global" && token.attributes.type !== "semantic") || (brand !== "global" && token.attributes.type === "semantic")))
           },
           // TODO: mode, modifier, space, surface
         ],

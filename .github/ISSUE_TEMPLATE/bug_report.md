@@ -1,14 +1,14 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-package: Package's name
+package: Package's or web app's name
 title: ""
 labels: ""
 assignees: revelt
 ---
 
-**Package's name**
-Which package from the monorepo is it for?
+**Package's or web app's name**
+Which package or web app from the monorepo is it for?
 
 **Describe the bug**
 A clear and concise description of what the bug is.

@@ -18,6 +18,8 @@ build/
 public/build/
 dist/
 types/
+app/styles/
+app/components/*/*.css*
 
 # misc
 .cache

@@ -324,6 +324,9 @@
     },
     {
       "path": "packages/util-nonempty"
+    },
+    {
+      "path": "data"
     }
   ]
 }

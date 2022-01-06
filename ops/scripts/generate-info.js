@@ -19,6 +19,7 @@ const allPackages = [...packagesOutsideMonorepo];
 const cliPackages = [];
 const programPackages = [];
 const specialPackages = [];
+const packageJSONData = {};
 
 fs.readdirSync(path.resolve("packages"))
   .filter((d) => fs.statSync(path.join("packages", d)).isDirectory())
@@ -30,6 +31,7 @@ fs.readdirSync(path.resolve("packages"))
           "utf8"
         )
       );
+      packageJSONData[packageName] = packageJsonContents;
       if (!packageJsonContents.private) {
         allPackages.push(packageJsonContents.name);
       }
@@ -144,19 +146,6 @@ for (let i = 0, len = allPackages.length; i < len; i++) {
   }
 }
 
-const packages = {
-  all: allPackages.sort(),
-  cli: cliPackages.sort(),
-  programs: programPackages.sort(),
-  special: specialPackages.sort(),
-  packagesOutsideMonorepo: packagesOutsideMonorepo.sort(),
-  totalPackageCount: allPackages.length,
-  cliCount: cliPackages.length,
-  programsCount: programPackages.length,
-  specialCount: specialPackages.length,
-  packagesOutsideMonorepoCount: packagesOutsideMonorepo.length,
-};
-
 // 3. compile top 10 of own and external deps and devdeps
 // -----------------------------------------------------------------------------
 
@@ -216,9 +205,9 @@ dependencyStats.top10ExternalDeps = top10ExternalDeps;
 // -----------------------------------------------------------------------------
 
 fs.writeFile(
-  path.resolve("./ops/data/interdeps.json"),
+  path.resolve("./data/sources/interdeps.ts"),
   // JSON.stringify(interdep, null, 4),
-  JSON.stringify(
+  `export const interdeps = ${JSON.stringify(
     interdep.filter((obj1) => {
       return !(
         !obj1.imports.length &&
@@ -227,35 +216,65 @@ fs.writeFile(
     }),
     null,
     4
-  ),
+  )};\n`,
   (err) => {
     if (err) {
       throw err;
     }
-    console.log(`\u001b[${32}m${`interdeps.json written OK`}\u001b[${39}m`);
+    console.log(`\u001b[${32}m${`interdeps.ts written OK`}\u001b[${39}m`);
   }
 );
 
 fs.writeFile(
-  path.resolve("./ops/data/packages.json"),
-  JSON.stringify(packages, null, 4),
+  path.resolve("./data/sources/packages.ts"),
+  `const all = ${JSON.stringify(allPackages.sort(), null, 4)} as const;
+const cli = ${JSON.stringify(cliPackages.sort(), null, 4)} as const;
+const programs = ${JSON.stringify(programPackages.sort(), null, 4)} as const;
+const special = ${JSON.stringify(specialPackages.sort(), null, 4)} as const;
+const packagesOutsideMonorepo = ${JSON.stringify(packagesOutsideMonorepo.sort(), null, 4)} as const;
+
+export const packages = {
+    all,
+    cli,
+    programs,
+    special,
+    packagesOutsideMonorepo,
+    totalPackageCount: ${allPackages.length},
+    cliCount: ${cliPackages.length},
+    programsCount: ${programPackages.length},
+    specialCount: ${specialPackages.length},
+    packagesOutsideMonorepoCount: ${packagesOutsideMonorepo.length},
+};\n`,
   (err) => {
     if (err) {
       throw err;
     }
-    console.log(`\u001b[${32}m${`packages.json written OK`}\u001b[${39}m`);
+    console.log(`\u001b[${32}m${`packages.ts written OK`}\u001b[${39}m`);
   }
 );
 
 fs.writeFile(
-  path.resolve("./ops/data/dependencyStats.json"),
-  JSON.stringify(sortAllObjectsSync(dependencyStats), null, 4),
+  path.resolve("./data/sources/dependencyStats.ts"),
+  `export const dependencyStats = ${JSON.stringify(sortAllObjectsSync(dependencyStats), null, 4)};\n`,
   (err) => {
     if (err) {
       throw err;
     }
     console.log(
-      `\u001b[${32}m${`dependencyStats.json written OK`}\u001b[${39}m`
+      `\u001b[${32}m${`dependencyStats.ts written OK`}\u001b[${39}m`
+    );
+  }
+);
+
+fs.writeFile(
+  path.resolve("./data/sources/packageJSONData.ts"),
+  `export const packageJSONData = ${JSON.stringify(packageJSONData, null, 4)};\n`,
+  (err) => {
+    if (err) {
+      throw err;
+    }
+    console.log(
+      `\u001b[${32}m${`packageJSONData.ts written OK`}\u001b[${39}m`
     );
   }
 );
@@ -268,15 +287,15 @@ try {
   // git rev-list --count HEAD
   commitTotal = await git(".git").raw(["rev-list", "--count", "HEAD"]);
   fs.writeFile(
-    path.join("./ops/data/gitStats.json"),
-    JSON.stringify({ commitTotal: commitTotal.trim() }, null, 4),
+    path.join("./data/sources/gitStats.ts"),
+    `export const gitStats = ${JSON.stringify({ commitTotal: commitTotal.trim() }, null, 4)}`,
     (err) => {
       if (err) {
         throw err;
       }
-      console.log(`\u001b[${32}m${`gitStats.json written OK`}\u001b[${39}m`);
+      console.log(`\u001b[${32}m${`gitStats.ts written OK`}\u001b[${39}m`);
     }
   );
 } catch (e) {
-  throw new Error("generate-info.js: can't access git data for gitStats.json");
+  throw new Error("generate-info.js: can't access git data for gitStats.ts");
 }

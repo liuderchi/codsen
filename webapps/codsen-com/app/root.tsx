@@ -21,6 +21,7 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import { useMatch, useResolvedPath, useLocation } from "react-router-dom";
+import { getAllArticles } from "~/utils/content.server";
 import { pathNameToCSSClass } from "./utils/pathNameToCSSClass";
 
 import { FooterBig } from "~/components/footer-big/footer-big";
@@ -50,8 +51,9 @@ export const links: LinksFunction = () => {
 
 // -----------------------------------------------------------------------------
 
-import { unencryptedSession } from "./sessions.server";
+import { unencryptedSession } from "~/sessions.server";
 export const action: ActionFunction = async ({ request }) => {
+  console.log(`${`\u001b[${36}m${`root.tsx action`}\u001b[${39}m`}`);
   let session = await unencryptedSession.getSession(
     request.headers.get("Cookie")
   );
@@ -66,11 +68,12 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+  console.log(`${`\u001b[${36}m${`root.tsx loader`}\u001b[${39}m`}`);
   let session = await unencryptedSession.getSession(
     request.headers.get("Cookie")
   );
   let theme = session.get("theme") || "auto";
-  return json({ theme });
+  return { theme };
 };
 
 // -----------------------------------------------------------------------------
@@ -105,7 +108,7 @@ function Document({
         {children}
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        <LiveReload />
       </body>
     </html>
   );
@@ -120,11 +123,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
         <div>
           <h1>There was an error</h1>
           <p>{error.message}</p>
-          <hr />
-          <p>
-            Hey, developer, you should replace this with what you want your
-            users to see.
-          </p>
+          <p>PS. This is root ErrorBoundary.</p>
         </div>
       </Layout>
     </Document>
@@ -205,6 +204,7 @@ function Layout({
   let location = useLocation();
 
   let onRadioChanged = () => {
+    console.log(`root.tsx: onRadioChanged() called`);
     submit(formRef.current, { action: location.pathname });
   };
 
@@ -244,13 +244,14 @@ function Layout({
                 className="remix-app__theme-toggle"
                 ref={formRef}
                 method="post"
+                action="/"
               >
                 {VALID_THEMES.map((theme) => (
                   <div key={theme} className="form-control">
                     <label className="cursor-pointer label">
                       <span className="label-text">{theme}</span>
                       <input
-                        data-testid={`theme-${theme}`}
+                        data-test={`theme-${theme}`}
                         type="radio"
                         name="theme"
                         defaultChecked={selectedTheme === theme}
@@ -283,14 +284,6 @@ function Layout({
                     Services
                   </NavLink>
                 </li>
-                {/* <li>
-                  <a href="https://github.com/codsen" target="_blank">
-                    <span>
-                      GitHub
-                      <IconNewTab />
-                    </span>
-                  </a>
-                </li> */}
                 <li>
                   <NavLink to="/login" globalNavPath={globalNavPath}>
                     Login

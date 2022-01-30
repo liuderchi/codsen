@@ -144,13 +144,11 @@ interface OSBodyInterface {
 function OSBody({ children, libArray }: OSBodyInterface) {
   return (
     <div className="content-row__container">
-      <div className="content-row__description">
-        <p>{children}</p>
-      </div>
+      <div className="content-row__description">{children}</div>
       <div className="content-row__packages">
-        {libArray.map((p) => {
+        {libArray.map((p, i) => {
           return (
-            <div className="content-row__package">
+            <div className="content-row__package" key={`os-body-${i}`}>
               <Link to={`/os/${p}`}>
                 <span className="emoji">📦</span>{" "}
                 <span className="content-row__name">{p}</span>{" "}
@@ -186,7 +184,7 @@ export default function IndexRoute() {
 
       <OSHeading idName="flagship">Flagship Libraries</OSHeading>
       <OSBody libArray={flagshipLibs}>
-        These are the largest and most complex programs here. Many smaller
+        These are the largest and the most complex programs here. Many smaller
         programs were created just to drive a certain feature of these programs.
         For example, whole <a href="#range-libraries">Ranges program family</a>{" "}
         was created because Detergent needed to compose string operations.

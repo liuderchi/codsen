@@ -1,13 +1,17 @@
 {
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "lib": ["DOM", "DOM.Iterable", "ES2021"],
+    "importsNotUsedAsValues": "error",
     "isolatedModules": true,
+    "incremental": true,
     "esModuleInterop": true,
+    "allowJs": true,
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "ES2019",
+    "module": "es2020",
+    "target": "es2020",
     "strict": true,
     "baseUrl": ".",
     "paths": {
@@ -17,8 +21,6 @@
         "../../data/programClassification"]
     },
     "composite": true,
-
-    // Remix takes care of building everything in `remix build`.
     "noEmit": true
   }
 }

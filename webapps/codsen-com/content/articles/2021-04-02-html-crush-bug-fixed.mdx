@@ -1,0 +1,12 @@
+---
+title: "`html-crush` bug fixed"
+date: "2021-04-02"
+image: "011"
+packages:
+  - html-crush
+  - babel
+tags:
+  - js
+---
+
+One line in Babel config, `env` preset's `loose` set to [true](https://babeljs.io/docs/en/babel-preset-env#loose) was causing a spread operator to disappear on only CommonJS builds (not ES Modules or UMD), which led to broken logic (program could not calculate `opts.breakToTheLeftOf` correctly any more), program inserted extra blank lines. A crazy bug, isn't it?

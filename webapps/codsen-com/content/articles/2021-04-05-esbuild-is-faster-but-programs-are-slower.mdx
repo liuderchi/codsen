@@ -1,0 +1,16 @@
+---
+title: "esbuild is faster but the built programs on average are slower"
+date: "2021-04-05"
+image: "013"
+packages:
+  - esbuild
+  - rollup
+  - "@babel/core"
+tags:
+  - js
+  - ts
+---
+
+Programs built by esbuild v0.11.5 appear to perform **on average 27% slower** than the same code built by Rollup. Some packages perform more than 90% slower though! In this context, I can't use it in _production_.
+
+Here are the details of the benchmarks. I hope it's me, not&nbsp;esbuild.

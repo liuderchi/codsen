@@ -4,7 +4,7 @@ import {
   licenceMIT,
   licenceCC,
 } from "../../data/various";
-import { IconNewTab } from "../svg/icon-new-tab";
+import { Link } from "../link";
 
 export const FooterBig = () => {
   return (
@@ -23,10 +23,9 @@ export const FooterBig = () => {
         <h3 className="h4">Trivia</h3>
         <p>
           This website was built with{" "}
-          <a rel="noreferrer" target="_blank" href="https://remix.run/">
+          <Link to="https://remix.run/" external>
             Remix
-            <IconNewTab />
-          </a>{" "}
+          </Link>{" "}
           framework. See&nbsp;more in <a href="/about/trivia/">Trivia</a>{" "}
           section.
         </p>
@@ -41,23 +40,13 @@ export const FooterBig = () => {
           {seeABug}
           <br />
           <span className="emoji">💘</span> Check out the{" "}
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href="https://indieweb.org/principles"
-          >
+          <Link to="https://indieweb.org/principles" external>
             Indieweb
-            <IconNewTab />
-          </a>{" "}
+          </Link>{" "}
           and{" "}
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href="https://liberamanifesto.com/"
-          >
+          <Link to="https://liberamanifesto.com/" external>
             Libera manifesto
-            <IconNewTab />
-          </a>
+          </Link>
           <br />
         </p>
         <h3 className="h4">Licences</h3>

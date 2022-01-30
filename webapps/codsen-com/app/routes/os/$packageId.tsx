@@ -1,11 +1,13 @@
-import { json, useParams, Link } from "remix";
+import { json, useParams, useLoaderData, Link } from "remix";
 import type { LoaderFunction, ActionFunction } from "remix";
 import { getQuasiRandom } from "~/utils/getQuasiRandom";
 import { packages } from "@codsen/data";
+import { useMdxComponent } from "~/utils/mdx";
+import { getReadme } from "~/utils/content.server";
 
 // -----------------------------------------------------------------------------
 
-import { unencryptedSession } from "../../sessions.server";
+import { unencryptedSession } from "~/sessions.server";
 
 export const action: ActionFunction = async ({ request }) => {
   let session = await unencryptedSession.getSession(
@@ -22,6 +24,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
+  console.log(`${`\u001b[${33}m${`Loader of $packageId.tsx`}\u001b[${39}m`}`);
   if (!params.packageId || !packages.all.includes(params.packageId as any)) {
     throw new Response("Not Found", {
       status: 404,
@@ -32,14 +35,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     request.headers.get("Cookie")
   );
   let theme = session.get("theme") || "auto";
-  return json({ theme });
+  const slug = params.packageId;
+  const readme = await getReadme(slug);
+
+  return { theme, readme };
 };
 
 // -----------------------------------------------------------------------------
 
-export default function IndexRoute() {
+export default function PackageRoute() {
+  const { readme } = useLoaderData();
+  const { title, date, code } = readme;
+  const Component = useMdxComponent(code);
+
   const params = useParams();
-  console.log(params.packageId);
 
   const currIdInAllPackagesList = packages.all.indexOf(params.packageId as any);
   const quasiRandomArr = getQuasiRandom(packages.all.length);
@@ -59,7 +68,9 @@ export default function IndexRoute() {
       <Link to={`/os/${packages.all[prevIdInRandomArray]}`}>Prev</Link> -{" "}
       <Link to={`/os/${packages.all[nextIdInRandomArray]}`}>Next</Link>
       <h1>{params.packageId}</h1>
-      <div>tbc</div>
+      <div>
+        <Component />
+      </div>
     </article>
   );
 }

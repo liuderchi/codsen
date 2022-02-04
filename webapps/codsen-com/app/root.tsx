@@ -1,16 +1,9 @@
 import { useRef } from "react";
-import type {
-  ActionFunction,
-  LinksFunction,
-  LinkProps,
-  LoaderFunction,
-} from "remix";
+import type { ActionFunction, LinksFunction, LoaderFunction } from "remix";
 import {
   json,
-  Link,
   Links,
   LiveReload,
-  Form,
   Meta,
   Outlet,
   Scripts,
@@ -20,18 +13,16 @@ import {
   useLoaderData,
 } from "remix";
 import type { MetaFunction } from "remix";
-import { useMatch, useResolvedPath, useLocation } from "react-router-dom";
-import { getAllArticles } from "~/utils/content.server";
+import { useMatch, useLocation } from "react-router-dom";
 import { pathNameToCSSClass } from "./utils/pathNameToCSSClass";
+
+import { Header } from "~/components/header/header";
 
 import { FooterBig } from "~/components/footer-big/footer-big";
 import footerBigStylesUrl from "~/components/footer-big/footer-big.css";
 
 import { FooterSmall } from "~/components/footer-small/footer-small";
 import footerSmallStylesUrl from "~/components/footer-small/footer-small.css";
-
-import { CodsenLogo } from "~/components/svg/codsen-logo";
-import { IconNewTab } from "~/components/svg/icon-new-tab";
 
 // -----------------------------------------------------------------------------
 
@@ -78,8 +69,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 // -----------------------------------------------------------------------------
 
-type Theme = "auto" | "light" | "dark";
-const VALID_THEMES: Theme[] = ["auto", "dark", "light"];
+export type Theme = "auto" | "light" | "dark";
+export const VALID_THEMES: Theme[] = ["auto", "dark", "light"];
 
 function Document({
   children,
@@ -166,28 +157,6 @@ export function CatchBoundary() {
   );
 }
 
-interface NavLinkInterface extends LinkProps {
-  globalNavPath?: string;
-}
-function NavLink({ children, to, globalNavPath, ...props }: NavLinkInterface) {
-  let resolved = useResolvedPath(to);
-  let isActive;
-  if (globalNavPath) {
-    isActive = to === globalNavPath;
-  } else {
-    isActive = !!useMatch({
-      path: resolved.pathname,
-      end: resolved.pathname === "/" || resolved.pathname === "/s",
-    });
-  }
-
-  return (
-    <Link {...(isActive ? { className: "active" } : {})} to={to} {...props}>
-      <span>{children}</span>
-    </Link>
-  );
-}
-
 function Layout({
   children,
   selectedTheme = "auto",
@@ -208,14 +177,14 @@ function Layout({
     submit(formRef.current, { action: location.pathname });
   };
 
-  let globalNavPath = "/";
+  let globalNavPath: string = "/";
   let globalNavClass = "global-nav-website";
 
-  const isLoginPath = useMatch({
+  const isLoginPath = !!useMatch({
     path: "/login",
     end: false,
   });
-  const isServicesPath = useMatch({
+  const isServicesPath = !!useMatch({
     path: "/s",
     end: false,
   });
@@ -237,103 +206,15 @@ function Layout({
           location.pathname
         )}`}
       >
-        <header className="remix-app__header">
-          <div className="container remix-app__header-content">
-            {!hideThemeToggle && (
-              <Form
-                className="remix-app__theme-toggle"
-                ref={formRef}
-                method="post"
-                action="/"
-              >
-                {VALID_THEMES.map((theme) => (
-                  <div key={theme} className="form-control">
-                    <label className="cursor-pointer label">
-                      <span className="label-text">{theme}</span>
-                      <input
-                        data-test={`theme-${theme}`}
-                        type="radio"
-                        name="theme"
-                        defaultChecked={selectedTheme === theme}
-                        className="radio"
-                        value={theme}
-                        onChange={onRadioChanged}
-                      />
-                    </label>
-                  </div>
-                ))}
-                <noscript>
-                  <button type="submit" className="btn btn-primary">
-                    Set
-                  </button>
-                </noscript>
-              </Form>
-            )}
-            <nav
-              aria-label="Global navigation"
-              className="remix-app__nav remix-app__header-global-nav"
-            >
-              <ul>
-                <li>
-                  <NavLink to="/" globalNavPath={globalNavPath}>
-                    Website
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/s" globalNavPath={globalNavPath}>
-                    Services
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/login" globalNavPath={globalNavPath}>
-                    Login
-                  </NavLink>
-                </li>
-              </ul>
-            </nav>
-            <div className="remix-app__header-home-link-container">
-              <Link to="/" className="remix-app__header-home-link">
-                <CodsenLogo />
-              </Link>
-            </div>
-            {!isLoginPath && !isServicesPath && (
-              <nav
-                aria-label="Main navigation"
-                className="remix-app__nav remix-app__header-nav"
-              >
-                <ul>
-                  <li>
-                    <NavLink to="/">Home</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/os">Open Source</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/articles">Articles</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/about">About</NavLink>
-                  </li>
-                </ul>
-              </nav>
-            )}
-            {isServicesPath && (
-              <nav
-                aria-label="Main navigation"
-                className="remix-app__nav remix-app__header-nav"
-              >
-                <ul>
-                  <li>
-                    <NavLink to="/s">Home</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/s/training">Training</NavLink>
-                  </li>
-                </ul>
-              </nav>
-            )}
-          </div>
-        </header>
+        <Header
+          formRef={formRef}
+          hideThemeToggle={hideThemeToggle}
+          selectedTheme={selectedTheme}
+          onRadioChanged={onRadioChanged}
+          globalNavPath={globalNavPath}
+          isLoginPath={isLoginPath}
+          isServicesPath={isServicesPath}
+        />
         <hr className="mt0 mb0" />
         <div className="remix-app__main">
           <div className="container remix-app__main-content">{children}</div>
@@ -350,7 +231,6 @@ export default function App() {
   let { theme = "auto" } = useLoaderData();
 
   // playgrounds should have full-screen UI
-  // let maxWide = useMatch({ path: useResolvedPath("/os/play").pathname });
   let isOneOfPlayPages = !!useMatch({
     path: "/os/play",
     end: false,

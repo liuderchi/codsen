@@ -293,6 +293,7 @@ header {
 }
 
 .remix-app__header-home-link-container {
+  line-height: 1;
   text-align: center;
   z-index: -1;
 }
@@ -364,7 +365,7 @@ header {
 
 h1,
 .h1 {
-  letter-spacing: -0.05em;
+  letter-spacing: -0.03em;
   // letter-spacing: -1px;
   font-weight: 700;
 
@@ -544,6 +545,31 @@ sub {
   font-size: 1.4rem;
   line-height: 1.2;
   margin-bottom: 1rem;
+}
+
+/* A single page of an npm package or an article */
+/* ----------------------------------------------------------------------------- */
+
+.single-page {
+  main {
+  }
+  aside {
+    display: none;
+  }
+  .heading {
+    text-align: center;
+  }
+  .single-page__content {
+    @media (min-width: $thousand) {
+      display: flex;
+      flex-direction: row;
+      main {
+      }
+      aside {
+        display: inline-flex;
+      }
+    }
+  }
 }
 
 /* Theme-specific overrides  */

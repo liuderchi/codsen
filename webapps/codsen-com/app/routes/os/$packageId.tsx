@@ -64,13 +64,59 @@ export default function PackageRoute() {
     ];
 
   return (
-    <article>
-      <Link to={`/os/${packages.all[prevIdInRandomArray]}`}>Prev</Link> -{" "}
-      <Link to={`/os/${packages.all[nextIdInRandomArray]}`}>Next</Link>
-      <h1>{params.packageId}</h1>
+    <div className="single-page">
       <div>
-        <Component />
+        <Link to={`/os/${packages.all[prevIdInRandomArray]}`}>Prev</Link> -{" "}
+        <Link to={`/os/${packages.all[nextIdInRandomArray]}`}>Next</Link>
       </div>
-    </article>
+      <div className="heading">
+        <h1>{params.packageId}</h1>
+        {/* TBC badges */}
+      </div>
+      <div className="single-page__content">
+        <main>
+          <div>
+            <Component />
+          </div>
+        </main>
+        <aside>
+          <ul>
+            <li>
+              <a href="#tbc">Installation</a>
+            </li>
+            <li>
+              <a href="#tbc">Quick Take</a>
+            </li>
+            <li>
+              <a href="#tbc">Examples</a>
+            </li>
+            <li>
+              <a href="#tbc">Features</a>
+            </li>
+            <li>
+              <a href="#tbc">API — Input</a>
+            </li>
+            <li>
+              <a href="#tbc">API — Output</a>
+            </li>
+            <li>
+              <a href="#tbc">Optional Options Object</a>
+            </li>
+            <li>
+              <a href="#tbc">Algorithm</a>
+            </li>
+            <li>
+              <a href="#tbc">Changelog</a>
+            </li>
+            <li>
+              <a href="#tbc">Contributing</a>
+            </li>
+            <li>
+              <a href="#tbc">Licence</a>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </div>
   );
 }

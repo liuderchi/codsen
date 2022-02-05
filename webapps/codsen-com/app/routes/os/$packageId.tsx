@@ -56,9 +56,7 @@ export default function PackageRoute() {
   const currIdInRandomArray = quasiRandomArr.indexOf(currIdInAllPackagesList);
   // use modulus to cycle within array
   const nextIdInRandomArray =
-    quasiRandomArr[
-      (currIdInRandomArray + 1 + packages.all.length) % packages.all.length
-    ];
+    quasiRandomArr[(currIdInRandomArray + 1) % packages.all.length];
   const prevIdInRandomArray =
     quasiRandomArr[
       (currIdInRandomArray - 1 + packages.all.length) % packages.all.length

@@ -176,11 +176,13 @@ export default function IndexRoute() {
     <>
       <h1>Open Source</h1>
 
-      <div className="separator" role="presentation">
+      <br />
+
+      {/* <div className="separator" role="presentation">
         <CodsenStarSmall />
         <Codsen2 />
         <CodsenStarLarge />
-      </div>
+      </div> */}
 
       <OSHeading idName="flagship">Flagship Libraries</OSHeading>
       <OSBody libArray={flagshipLibs}>

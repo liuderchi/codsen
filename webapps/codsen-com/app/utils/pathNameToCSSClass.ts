@@ -13,7 +13,6 @@
 // out: "page-os page-os-email-comb page-os-email-comb-try"
 
 function pathNameToCSSClass(str: string): string {
-  console.log(`${`\u001b[${33}m${`str`}\u001b[${39}m`} = ${JSON.stringify(str, null, 4)}`)
   if (!str) {
     return ""
   }

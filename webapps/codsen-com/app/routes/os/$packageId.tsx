@@ -4,6 +4,7 @@ import { getQuasiRandom } from "~/utils/getQuasiRandom";
 import { packages } from "@codsen/data";
 import { useMdxComponent } from "~/utils/mdx";
 import { getReadme } from "~/utils/content.server";
+import usePrefersColorScheme from "use-prefers-color-scheme";
 
 // -----------------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 // -----------------------------------------------------------------------------
 
 export default function PackageRoute() {
-  const { readme } = useLoaderData();
+  const { theme, readme } = useLoaderData();
   const { title, date, code } = readme;
   const Component = useMdxComponent(code);
 
@@ -63,26 +64,116 @@ export default function PackageRoute() {
       (currIdInRandomArray - 1 + packages.all.length) % packages.all.length
     ];
 
+  let prefersLight = false;
+
+  if (typeof document !== "undefined") {
+    prefersLight = usePrefersColorScheme() === "light";
+  }
+
+  const green =
+    theme === "light" || (prefersLight && theme !== "dark")
+      ? "63ffbd"
+      : "3084c9";
+  const labelColor =
+    theme === "light" || (prefersLight && theme !== "dark") ? "000" : "fff";
+
   return (
-    <div className="single-page">
+    <>
       <div>
         <Link to={`/os/${packages.all[prevIdInRandomArray]}`}>Prev</Link> -{" "}
         <Link to={`/os/${packages.all[nextIdInRandomArray]}`}>Next</Link>
       </div>
       <div className="heading">
-        <h1>{params.packageId}</h1>
-        {/* TBC badges */}
+        <h1>
+          {params.packageId}
+          <sup
+            title="current version is 6.0.1"
+            aria-label="current version is 6.0.1"
+          >
+            6.0.1
+          </sup>
+        </h1>
+        <div className="badges">
+          <a
+            href={`https://www.npmjs.com/package/${params.packageId}`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              src={`https://img.shields.io/badge/-npm-blue?style=flat-square&color=${green}`}
+              alt="page on npm"
+            />
+          </a>{" "}
+          <a
+            href={`https://github.com/codsen/codsen/blob/main/packages/${params.packageId}`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              src={`https://img.shields.io/badge/-github-blue?style=flat-square&color=${green}`}
+              alt="page on github"
+            />
+          </a>{" "}
+          <a
+            href={`https://github.com/codsen/codsen/blob/main/packages/${params.packageId}/types/index.d.ts`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              src={`https://img.shields.io/badge/.d.ts-%E2%9C%94-blue?style=flat-square&color=${green}&labelColor=${labelColor}`}
+              alt="page on npm"
+            />
+          </a>{" "}
+          <a
+            target="_blank"
+            href={`https://npmcharts.com/compare/${params.packageId}?interval=30`}
+            rel="noreferrer"
+          >
+            <img
+              src={`https://img.shields.io/npm/dm/${params.packageId}.svg?style=flat-square&color=${green}&labelColor=${labelColor}`}
+              alt="Downloads per month"
+            />
+          </a>{" "}
+          <a target="_blank" href="https://prettier.io" rel="noreferrer">
+            <img
+              src={`https://img.shields.io/badge/code_style-prettier-brightgreen.svg?style=flat-square&color=${green}&labelColor=${labelColor}`}
+              alt="Code style: prettier"
+            />
+          </a>{" "}
+          <a
+            href="https://github.com/codsen/codsen/blob/main/LICENSE"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              src={`https://img.shields.io/badge/licence-MIT-brightgreen.svg?style=flat-square&color=${green}&labelColor=${labelColor}`}
+              alt="MIT License"
+            />
+          </a>{" "}
+          <a
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            href="https://liberamanifesto.com"
+          >
+            <img
+              src={`https://img.shields.io/badge/libera-manifesto-lightgrey.svg?style=flat-square&color=${green}&labelColor=${labelColor}`}
+              alt="libera manifesto"
+            />
+          </a>
+        </div>
       </div>
-      <div className="single-page__content">
+      <div className="content">
         <main>
-          <div>
+          <article>
             <Component />
-          </div>
+          </article>
         </main>
         <aside>
           <ul>
             <li>
-              <a href="#tbc">Installation</a>
+              <a className="selected" href="#tbc">
+                Installation
+              </a>
             </li>
             <li>
               <a href="#tbc">Quick Take</a>
@@ -117,6 +208,6 @@ export default function PackageRoute() {
           </ul>
         </aside>
       </div>
-    </div>
+    </>
   );
 }

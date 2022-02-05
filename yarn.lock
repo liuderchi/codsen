@@ -10745,6 +10745,11 @@ url-regex@^5.0.0:
     ip-regex "^4.1.0"
     tlds "^1.203.0"
 
+use-prefers-color-scheme@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/use-prefers-color-scheme/-/use-prefers-color-scheme-0.1.1.tgz#6b7286ed5b45fe68f922ae1179c48984d93249c8"
+  integrity sha512-KFuYYXaVBiVjwR+DccbN2w+1g+HpTBSEet3d+03S7Ionv1ogED8qeXEK7dkq/oNVu3rKbJYrgEzCZpGU/9meGA==
+
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"

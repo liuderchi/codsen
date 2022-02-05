@@ -31,6 +31,16 @@
           "comment": "{color.light.blue.comment}"
         }
       },
+      "aside": {
+        "link": {
+          "default": {
+            "value": "{color.light.grey.darker}"
+          },
+          "hover-fg": {
+            "value": "{color.light.text.value}"
+          }
+        }
+      },
       "border": {
         "value": "{color.light.border.value}",
         "comment": "{color.light.border.comment}"

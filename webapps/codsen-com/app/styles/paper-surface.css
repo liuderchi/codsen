@@ -439,6 +439,7 @@ header {
 /* ----------------------------------------------------------------------------- */
 h1,
 .h1 {
+  text-align: center;
   letter-spacing: -0.03em;
   font-weight: 700;
   font-size: 5.82rem;

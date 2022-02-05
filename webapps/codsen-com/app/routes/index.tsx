@@ -24,7 +24,6 @@ export default function IndexRoute() {
   let articles = useLoaderData();
   return (
     <div>
-      <h1>Home</h1>
       <p>
         <Link to="/os/play/json-variables">json-variables playground</Link>
       </p>

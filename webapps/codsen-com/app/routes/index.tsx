@@ -1,5 +1,4 @@
-import { useLoaderData } from "remix";
-import type { LoaderFunction } from "remix";
+import { json, LoaderFunction, useLoaderData } from "remix";
 import type { Article } from "~/utils/content.server";
 import { ArticleListEntry } from "~/components/article-list-entry/article-list-entry";
 import { getAllArticles } from "~/utils/content.server";
@@ -13,15 +12,34 @@ import { Link } from "../components/link";
 
 // -----------------------------------------------------------------------------
 
+type LoaderData = {
+  articles: Article[];
+};
+
 export const loader: LoaderFunction = async () => {
   const articles = await getAllArticles();
-  return articles;
+  const latestArticles = articles
+    .sort((a, b) => {
+      const aDate = a.date instanceof Date ? a.date : new Date(a.date);
+      const bDate = b.date instanceof Date ? b.date : new Date(b.date);
+      return bDate.getTime() - aDate.getTime();
+    })
+    .slice(0, 5);
+
+  const data: LoaderData = { articles: latestArticles };
+
+  return json(data, {
+    headers: {
+      "Cache-Control": "private, max-age=3600",
+      Vary: "Cookie",
+    },
+  });
 };
 
 // -----------------------------------------------------------------------------
 
 export default function IndexRoute() {
-  let articles = useLoaderData();
+  let { articles } = useLoaderData<LoaderData>();
   return (
     <div>
       <p>

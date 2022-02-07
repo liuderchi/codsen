@@ -3,7 +3,7 @@ import { getMdxFile, getMdxFilesFromDir } from "./mdx.server";
 interface ArticleFrontMatter {
   title: string;
   description: string;
-  date: Date;
+  date: Date | string;
   categories: Array<string>;
   meta: {
     keywords: Array<string>;
@@ -13,7 +13,7 @@ interface ArticleFrontMatter {
 
 export interface Article extends ArticleFrontMatter {
   slug: string;
-  code?: string;
+  code: string;
 }
 
 interface ReadmeFrontMatter {

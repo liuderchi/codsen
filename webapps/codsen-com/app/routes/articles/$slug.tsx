@@ -3,7 +3,8 @@ import type { LoaderFunction, ActionFunction } from "remix";
 import parseISO from "date-fns/parseISO";
 import format from "date-fns/format";
 import { useMdxComponent } from "~/utils/mdx";
-import { getArticle } from "~/utils/content.server";
+import { getArticle, Article } from "~/utils/content.server";
+import type { AppLoader } from "~/types";
 import invariant from "tiny-invariant";
 
 // -----------------------------------------------------------------------------
@@ -11,22 +12,39 @@ import invariant from "tiny-invariant";
 import { action as rootAction } from "~/root";
 export const action = rootAction;
 
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const slug = params.slug;
+type LoaderData = {
+  article: Article;
+};
+
+export const loader: AppLoader<{ slug: string }> = async ({ params }) => {
+  const { slug } = params;
   invariant(slug, `Post slug ${slug} is missing`);
-  return await getArticle(slug);
+  const article = await getArticle(slug);
+
+  const data: LoaderData = { article };
+
+  return json(data, {
+    headers: {
+      "Cache-Control": "private, max-age=3600",
+      Vary: "Cookie",
+    },
+  });
 };
 
 // -----------------------------------------------------------------------------
 
 export default function FullArticle() {
-  const { title, date, code } = useLoaderData();
+  const { article } = useLoaderData<LoaderData>();
+  const { title, date, code } = article;
   const Component = useMdxComponent(code);
 
   return (
     <article>
       <h1>{title}</h1>
-      <p>Date: {format(parseISO(date), "MMMM dd, yyyy")}</p>
+      <p>
+        Date:{" "}
+        {format(date instanceof Date ? date : parseISO(date), "MMMM dd, yyyy")}
+      </p>
       <div>
         <Component />
       </div>

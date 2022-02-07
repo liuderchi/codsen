@@ -1,26 +1,11 @@
 {
+  "files": [],
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
-  "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2021"],
-    "importsNotUsedAsValues": "error",
-    "isolatedModules": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "allowJs": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "module": "es2020",
-    "target": "es2020",
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": [
-        "./app/*",
-        "../../data/packages.json",
-        "../../data/programClassification"]
-    },
-    "composite": true,
-    "noEmit": true
-  }
+  "exclude": ["node_modules"],
+  "extends": "./other/shared-tsconfig.json",
+  "references": [
+    {"path": "types"},
+    {"path": "app"},
+    {"path": "server"}
+  ]
 }

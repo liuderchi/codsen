@@ -10,10 +10,11 @@ import {
   ScrollRestoration,
   useCatch,
   useSubmit,
+  useLocation,
   useLoaderData,
 } from "remix";
 import type { MetaFunction } from "remix";
-import { useMatch, useLocation } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 import { pathNameToCSSClass } from "./utils/pathNameToCSSClass";
 
 import { Header } from "~/components/header/header";

@@ -19,6 +19,7 @@ lib-cov
 .next/
 out/
 build/
+server-build/
 build/Release
 public/build/
 dist/
@@ -47,6 +48,8 @@ pids
 .env.development.local
 .env.test.local
 .env.production.local
+*.local.*
+.envrc
 
 # ts
 *.tsbuildinfo

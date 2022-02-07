@@ -153,7 +153,7 @@
     "simple-git": "^2.48.0",
     "tempy": "^2.0.0",
     "turbo": "latest",
-    "typescript": "^4.5.3",
+    "typescript": "^4.5.5",
     "uvu": "^0.5.2"
   }
 }

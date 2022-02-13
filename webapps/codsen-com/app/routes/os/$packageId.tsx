@@ -2,34 +2,48 @@ import { json, useParams, useLoaderData, useLocation, Link } from "remix";
 import type { LoaderFunction, ActionFunction } from "remix";
 import { themeSessionResolver } from "~/utils/theme.server";
 import { getQuasiRandom } from "~/utils/getQuasiRandom";
-import { getReadme } from "~/utils/content.server";
+import { getReadme, Readme } from "~/utils/content.server";
 import { useMdxComponent } from "~/utils/mdx";
 import { packages, packageJSONData } from "@codsen/data";
 import invariant from "tiny-invariant";
 import { useTheme } from "remix-themes";
 import { Breadcrumb } from "~/components/breadcrumb/breadcrumb";
+import type { AppLoader } from "~/types";
+
+type LoaderData = {
+  readme: Readme;
+};
 
 // -----------------------------------------------------------------------------
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: AppLoader<{ packageId: string }> = async ({ params }) => {
   if (!params.packageId || !packages.all.includes(params.packageId as any)) {
     throw new Response("Not Found", {
       status: 404,
     });
   }
-  const { getTheme } = await themeSessionResolver(request);
-  const slug = params.packageId;
-  const readme = await getReadme(slug);
-  return { theme: getTheme(), readme };
+
+  const { packageId } = params;
+  const readme = await getReadme(packageId);
+
+  const data: LoaderData = { readme };
+
+  return json(data, {
+    headers: {
+      "Cache-Control": "private, max-age=3600",
+      Vary: "Cookie",
+    },
+  });
 };
 
 // -----------------------------------------------------------------------------
 
 export default function PackageRoute() {
-  const { readme } = useLoaderData();
+  const { readme } = useLoaderData<LoaderData>();
   const [theme] = useTheme();
 
   const { title, date, code } = readme;
+  invariant(code);
   const Component = useMdxComponent(code);
 
   const params = useParams();
@@ -82,7 +96,7 @@ export default function PackageRoute() {
             </sup>
           </span>
         </h1>
-        <p style={{ "margin-bottom": "2rem;" }}>
+        <p className="heading-subtitle">
           {(packageJSONData as any)[params.packageId].description}
         </p>
         <div className="badges">

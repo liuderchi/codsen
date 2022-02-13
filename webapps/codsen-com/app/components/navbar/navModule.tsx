@@ -8,7 +8,6 @@ interface NavModuleProps {
 }
 export const NavModule = ({ links, global = false }: NavModuleProps) => {
   let globalNavPath: string = "/";
-  let globalNavClass = "global-nav-website";
 
   const isLoginPath = !!useMatch({
     path: "/login",
@@ -21,10 +20,8 @@ export const NavModule = ({ links, global = false }: NavModuleProps) => {
 
   if (isLoginPath) {
     globalNavPath = "/login";
-    globalNavClass = "global-nav-login";
   } else if (isServicesPath) {
     globalNavPath = "/s";
-    globalNavClass = "global-nav-services";
   }
 
   return (
@@ -35,9 +32,9 @@ export const NavModule = ({ links, global = false }: NavModuleProps) => {
       }`}
     >
       <ul>
-        {links.map(({ to, label }) => (
-          <li>
-            <NavLink key={label} to={to} {...(global ? { globalNavPath } : {})}>
+        {links.map(({ to, label }, idx) => (
+          <li key={`${label.toLowerCase()}${idx}`}>
+            <NavLink to={to} {...(global ? { globalNavPath } : {})}>
               {label}
             </NavLink>
           </li>

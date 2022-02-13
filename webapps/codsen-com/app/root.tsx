@@ -25,7 +25,6 @@ import { useMatch } from "react-router-dom";
 import { pathNameToCSSClass } from "./utils/misc";
 
 import { Header } from "~/components/header/header";
-import { FourZeroFour, ServerError } from "~/components/errors";
 
 import { FooterBig } from "~/components/footer-big/footer-big";
 import footerBigStylesUrl from "~/components/footer-big/footer-big.css";
@@ -97,65 +96,39 @@ export const loader: LoaderFunction = async ({ request }) => {
 // UI
 // -----------------------------------------------------------------------------
 
-// https://remix.run/docs/en/v1/api/conventions#errorboundary
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error);
-  return (
-    <html lang="en">
-      <head>
-        <title>Oh no...</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <ServerError error={error} />
-      </body>
-      <Scripts />
-    </html>
-  );
-}
-
-function App() {
+function Document({
+  children,
+  title,
+  noLoader = false,
+}: {
+  children: React.ReactNode;
+  title?: string;
+  noLoader?: boolean;
+}) {
   const data = useLoaderData<LoaderData>();
   const [theme] = useTheme();
 
   let location = useLocation();
   let maxWide = location.pathname.endsWith("/try");
 
-  const FooterClassName = maxWide ? "footer-small" : "footer-big";
-
   return (
     <html lang="en" data-theme={theme ?? ""}>
       <head>
         <meta charSet="utf-8" />
+        {title ? <title>{title}</title> : null}
         <Meta />
-        <PreventFlashOnWrongTheme
-          ssrTheme={Boolean(data.requestInfo.session.theme)}
-        />
+        {!noLoader && (
+          <PreventFlashOnWrongTheme
+            ssrTheme={Boolean(data.requestInfo.session.theme)}
+          />
+        )}
         <Links />
       </head>
       <body
         id="page-top"
         className={`paper-surface${maxWide ? " maxWide" : ""}`}
       >
-        <div className="remix-app">
-          <div
-            className={`remix-app__container ${pathNameToCSSClass(
-              location.pathname
-            )}`}
-          >
-            <Header />
-            <hr className="mt0 mb0" />
-            <div className="remix-app__main">
-              <div className="container remix-app__main-content">
-                <Outlet />
-              </div>
-            </div>
-          </div>
-          <footer className={`remix-app__footer ${FooterClassName}`}>
-            {maxWide ? <FooterSmall /> : <FooterBig />}
-          </footer>
-        </div>
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -164,15 +137,105 @@ function App() {
   );
 }
 
-export default function AppWithProviders() {
-  const data = useLoaderData<LoaderData>();
+function Layout({
+  children,
+  isErrorPage,
+}: {
+  children: React.ReactNode;
+  isErrorPage?: boolean;
+}) {
+  let location = useLocation();
+  let maxWide = location.pathname.endsWith("/try");
+  const FooterClassName = maxWide ? "footer-small" : "footer-big";
+  return (
+    <div className="remix-app">
+      <div
+        className={`remix-app__container${
+          isErrorPage ? " page-error" : ""
+        } ${pathNameToCSSClass(location.pathname)}`}
+      >
+        <Header />
+        <hr className="mt0 mb0" />
+        <div className="remix-app__main">
+          <div className="container remix-app__main-content">{children}</div>
+        </div>
+      </div>
+      <footer className={`remix-app__footer ${FooterClassName}`}>
+        {maxWide ? <FooterSmall /> : <FooterBig />}
+      </footer>
+    </div>
+  );
+}
 
+// https://remix.run/docs/en/v1/api/conventions#errorboundary
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.log(`ErrorBoundary()`);
+  console.error(error);
+  return (
+    <ThemeProvider specifiedTheme={null} themeAction="/action/set-theme">
+      <Document title="Error!" noLoader>
+        <Layout isErrorPage>
+          <div>
+            <h1>Error!</h1>
+            <p>{error.message}</p>
+          </div>
+        </Layout>
+      </Document>
+    </ThemeProvider>
+  );
+}
+
+// https://remix.run/docs/en/v1/api/conventions#catchboundary
+export function CatchBoundary() {
+  console.log(`CatchBoundary()`);
+  const caught = useCatch();
+
+  let message;
+  switch (caught.status) {
+    case 401:
+      message = (
+        <p>
+          Oops! Looks like you tried to visit a page that you do not have access
+          to.
+        </p>
+      );
+      break;
+    case 404:
+      message = (
+        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
+      );
+      break;
+
+    default:
+      throw new Error(caught.data || caught.statusText);
+  }
+
+  return (
+    <ThemeProvider specifiedTheme={null} themeAction="/action/set-theme">
+      <Document title={`${caught.status} ${caught.statusText}`} noLoader>
+        <Layout isErrorPage>
+          <h1>
+            {caught.status}: {caught.statusText}
+          </h1>
+          {message}
+        </Layout>
+      </Document>
+    </ThemeProvider>
+  );
+}
+
+export default function App() {
+  const data = useLoaderData<LoaderData>();
   return (
     <ThemeProvider
       specifiedTheme={data.requestInfo.session.theme}
       themeAction="/action/set-theme"
     >
-      <App />
+      <Document>
+        <Layout>
+          <Outlet />
+        </Layout>
+      </Document>
     </ThemeProvider>
   );
 }

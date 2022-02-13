@@ -571,11 +571,13 @@ sub {
 
 /* Login page-specific */
 /* ----------------------------------------------------------------------------- */
-.page-login .remix-app__main {
+.page-login .remix-app__main,
+.page-error .remix-app__main {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .page-login .remix-app__header-content {
   padding-bottom: 2rem;
 }

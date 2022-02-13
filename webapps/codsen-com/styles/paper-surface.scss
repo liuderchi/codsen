@@ -529,15 +529,17 @@ sub {
 /* Login page-specific */
 /* ----------------------------------------------------------------------------- */
 
-.page-login {
+.page-login,
+.page-error {
   .remix-app__main {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .remix-app__header-content {
-    padding-bottom: 2rem;
-  }
+}
+
+.page-login .remix-app__header-content {
+  padding-bottom: 2rem;
 }
 
 .page-login {

@@ -4,12 +4,6 @@ import { ArticleListEntry } from "~/components/article-list-entry/article-list-e
 import { getAllArticles } from "~/utils/content.server";
 import { Link } from "../components/link";
 
-// import stylesUrl from "../styles/index.css";
-
-// export const links: LinksFunction = () => {
-//   return [{ rel: "stylesheet", href: stylesUrl }];
-// };
-
 // -----------------------------------------------------------------------------
 
 type LoaderData = {

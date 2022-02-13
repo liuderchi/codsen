@@ -117,6 +117,15 @@ input:where([type="search"]) {
   cursor: help;
 }
 
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /* General styling. */
 /* ----------------------------------------------------------------------------- */
 
@@ -230,23 +239,24 @@ body {
     }
   }
 
-  h1 sup {
-    // for versions
-    font-weight: normal;
-    font-size: 1.5rem;
-    letter-spacing: normal;
-    line-height: 1;
-    position: relative;
-
-    top: -4em;
-    right: 2em;
-
-    @media (min-width: $mid) {
-      top: -5em;
+  h1 {
+    span {
+      position: relative;
     }
-    @media (min-width: $thousand) {
-      top: -5.5em;
-      right: 2em;
+    sup {
+      // for versions
+      font-weight: normal;
+      font-size: 1.5rem;
+      letter-spacing: normal;
+      line-height: 1;
+      position: absolute;
+
+      top: -1rem;
+      right: 0;
+
+      @media (min-width: $thousand) {
+        top: 0;
+      }
     }
   }
 
@@ -426,12 +436,10 @@ h1,
   text-align: center;
   letter-spacing: -0.03em;
   font-weight: 700;
-
   font-size: 5.82rem; /* 0.6x */
   line-height: 1;
   margin-top: 4rem; /* was 7.8rem */
   margin-bottom: 3rem; /* was 7.8rem */
-  hyphens: none;
 
   @media (min-width: $mid) {
     font-size: 7.275rem; /* 0.75x */
@@ -610,6 +618,9 @@ sub {
     text-align: center;
     margin-bottom: 1rem;
   }
+  .heading-subtitle {
+    margin-bottom: 2rem;
+  }
   .content {
     @media (min-width: $thousand) {
       display: flex;
@@ -736,7 +747,6 @@ code[class*="language-"] {
   -moz-tab-size: 4;
   -o-tab-size: 4;
   tab-size: 4;
-  hyphens: none;
 }
 
 pre[class*="language-"]::selection,
@@ -948,20 +958,34 @@ pre[class*="language-"] > code[class*="language-"] {
   &:hover a span {
     color: #1e1e1e;
   }
+
+  // @media (max-width: 530px) {
+  //   order: 2;
+  //   margin: 0 1.5rem;
+  // }
 }
 
 .breadcrumb {
   display: flex;
   justify-content: space-between;
   color: var(--c-color-semantic-aside-link-default);
+  line-height: 1;
+
+  @media (max-width: 530px) {
+    flex-wrap: wrap;
+  }
 
   /* central breadcrumb */
-  span.breadcrumb {
+  span.breadcrumb-container {
     width: 100%;
     text-align: center;
     flex: 1;
-    line-height: 1;
-    span {
+    // @media (max-width: $mid) {
+    //   order: 1;
+    //   flex-basis: 100%;
+    // }
+
+    span.breadcrumb-contents {
       width: 100%;
       display: block;
       a {
@@ -981,6 +1005,10 @@ pre[class*="language-"] > code[class*="language-"] {
 
   .rightArrow,
   .leftArrow {
+    @media (max-width: $thousand) {
+      display: none;
+    }
+
     @include smallCaps();
     display: flex;
     width: 12.8rem;

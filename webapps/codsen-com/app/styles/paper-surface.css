@@ -158,6 +158,15 @@ input:where([type="search"]) {
   cursor: help;
 }
 
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /* General styling. */
 /* ----------------------------------------------------------------------------- */
 html {
@@ -271,24 +280,21 @@ body {
 .remix-app__main h4 sup {
   cursor: help;
 }
+.remix-app__main h1 span {
+  position: relative;
+}
 .remix-app__main h1 sup {
   font-weight: normal;
   font-size: 1.5rem;
   letter-spacing: normal;
   line-height: 1;
-  position: relative;
-  top: -4em;
-  right: 2em;
-}
-@media (min-width: 550px) {
-  .remix-app__main h1 sup {
-    top: -5em;
-  }
+  position: absolute;
+  top: -1rem;
+  right: 0;
 }
 @media (min-width: 1000px) {
   .remix-app__main h1 sup {
-    top: -5.5em;
-    right: 2em;
+    top: 0;
   }
 }
 .remix-app__main h2 sup {
@@ -465,7 +471,6 @@ h1,
   /* was 7.8rem */
   margin-bottom: 3rem;
   /* was 7.8rem */
-  hyphens: none;
 }
 @media (min-width: 550px) {
   h1,
@@ -648,6 +653,10 @@ sub {
   text-align: center;
   margin-bottom: 1rem;
 }
+.page-os .heading-subtitle,
+.page-articles .heading-subtitle {
+  margin-bottom: 2rem;
+}
 @media (min-width: 1000px) {
   .page-os .content,
 .page-articles .content {
@@ -772,7 +781,6 @@ code[class*=language-] {
   -moz-tab-size: 4;
   -o-tab-size: 4;
   tab-size: 4;
-  hyphens: none;
 }
 
 pre[class*=language-]::selection,
@@ -983,19 +991,24 @@ pre[class*=language-] > code[class*=language-] {
   display: flex;
   justify-content: space-between;
   color: var(--c-color-semantic-aside-link-default);
+  line-height: 1;
   /* central breadcrumb */
 }
-.breadcrumb span.breadcrumb {
+@media (max-width: 530px) {
+  .breadcrumb {
+    flex-wrap: wrap;
+  }
+}
+.breadcrumb span.breadcrumb-container {
   width: 100%;
   text-align: center;
   flex: 1;
-  line-height: 1;
 }
-.breadcrumb span.breadcrumb span {
+.breadcrumb span.breadcrumb-container span.breadcrumb-contents {
   width: 100%;
   display: block;
 }
-.breadcrumb span.breadcrumb span a {
+.breadcrumb span.breadcrumb-container span.breadcrumb-contents a {
   color: var(--c-color-semantic-aside-link-default);
   transition: all 0.3s;
   display: inline-block;
@@ -1003,7 +1016,7 @@ pre[class*=language-] > code[class*=language-] {
   /* for line-height=1 (which is needed when stacking)*/
   padding: 1.9rem 1.6rem;
 }
-.breadcrumb span.breadcrumb span a:hover {
+.breadcrumb span.breadcrumb-container span.breadcrumb-contents a:hover {
   text-decoration: none;
   color: var(--c-color-semantic-aside-link-hover-fg);
 }
@@ -1020,6 +1033,12 @@ pre[class*=language-] > code[class*=language-] {
   align-items: center;
   position: relative;
   margin-top: 1.6rem;
+}
+@media (max-width: 1000px) {
+  .breadcrumb .rightArrow,
+.breadcrumb .leftArrow {
+    display: none;
+  }
 }
 .breadcrumb .rightArrow span,
 .breadcrumb .leftArrow span {

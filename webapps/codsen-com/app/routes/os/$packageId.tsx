@@ -4,7 +4,7 @@ import { themeSessionResolver } from "~/utils/theme.server";
 import { getQuasiRandom } from "~/utils/getQuasiRandom";
 import { getReadme } from "~/utils/content.server";
 import { useMdxComponent } from "~/utils/mdx";
-import { packages } from "@codsen/data";
+import { packages, packageJSONData } from "@codsen/data";
 import invariant from "tiny-invariant";
 import { useTheme } from "remix-themes";
 import { Breadcrumb } from "~/components/breadcrumb/breadcrumb";
@@ -72,14 +72,19 @@ export default function PackageRoute() {
       />
       <div className="heading">
         <h1>
-          {params.packageId}
-          <sup
-            title="current version is 6.0.1"
-            aria-label="current version is 6.0.1"
-          >
-            6.0.1
-          </sup>
+          <span>
+            {params.packageId}
+            <sup
+              title="current version is 6.0.1"
+              aria-label="current version is 6.0.1"
+            >
+              6.0.1
+            </sup>
+          </span>
         </h1>
+        <p style={{ "margin-bottom": "2rem;" }}>
+          {(packageJSONData as any)[params.packageId].description}
+        </p>
         <div className="badges">
           <a
             href={`https://www.npmjs.com/package/${params.packageId}`}

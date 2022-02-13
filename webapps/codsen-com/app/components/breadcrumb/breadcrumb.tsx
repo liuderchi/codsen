@@ -14,7 +14,11 @@ function GenerateBreadcrumbChain({ location }: { location: string }) {
       {pathNameToBreadcrumbs(location).map(({ label, url }, i, arr) => (
         <>
           <Link to={`/${url}`}>{labelMapper(label)}</Link>
-          {arr[i + 1] ? <>&rarr;</> : null}
+          {arr[i + 1] ? (
+            <span className="noselect" aria-hidden="true">
+              &rarr;
+            </span>
+          ) : null}
         </>
       ))}
     </>
@@ -96,9 +100,9 @@ export const Breadcrumb = ({
           </Link>
         </motion.span>
       )}
-      <span className="breadcrumb">
+      <span className="breadcrumb-container">
         {currentPath && (
-          <span>
+          <span className="breadcrumb-contents">
             <GenerateBreadcrumbChain location={currentPath} />
           </span>
         )}

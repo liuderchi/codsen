@@ -480,11 +480,12 @@ h1,
     font-size: 9.7rem;
   }
 }
-.page-os-exactly h1, .page-articles-exactly h1, .page-about-exactly h1, .page-s-exactly h1,
+.page-os-exactly h1, .page-articles-exactly h1, .page-about-exactly h1, .page-s-exactly h1, .page-s-training-exactly h1,
 .page-os-exactly .h1,
 .page-articles-exactly .h1,
 .page-about-exactly .h1,
-.page-s-exactly .h1 {
+.page-s-exactly .h1,
+.page-s-training-exactly .h1 {
   margin-top: 7.8rem;
 }
 

@@ -151,16 +151,6 @@ export default function ThemeToggle() {
         style={{ originX: "50%", originY: "50%" }}
       >
         {theme === Theme.DARK && loaded ? (
-          <motion.path
-            id="svg-feather-moon"
-            d="M30.84,22.36c-0.46,4.95-4.84,8.59-9.79,8.13c-4.95-0.46-8.59-4.84-8.13-9.79c0.4-4.32,3.82-7.73,8.13-8.13
-	c-2.3,3.11-1.64,7.49,1.47,9.79C24.99,24.19,28.36,24.19,30.84,22.36z"
-            initial="initial"
-            animate="animate"
-            whileTap="whileTap"
-            variants={moonVariants}
-          />
-        ) : (
           <>
             <motion.circle
               cx="21.85"
@@ -187,6 +177,16 @@ export default function ThemeToggle() {
               <line x1="28.21" y1="15.19" x2="29.63" y2="13.77" />
             </motion.g>
           </>
+        ) : (
+          <motion.path
+            id="svg-feather-moon"
+            d="M30.84,22.36c-0.46,4.95-4.84,8.59-9.79,8.13c-4.95-0.46-8.59-4.84-8.13-9.79c0.4-4.32,3.82-7.73,8.13-8.13
+	c-2.3,3.11-1.64,7.49,1.47,9.79C24.99,24.19,28.36,24.19,30.84,22.36z"
+            initial="initial"
+            animate="animate"
+            whileTap="whileTap"
+            variants={moonVariants}
+          />
         )}
 
         <motion.path

@@ -34,7 +34,8 @@
       "aside": {
         "link": {
           "default": {
-            "value": "{color.light.grey}"
+            "value": "{color.dark.black.thirtyEight.value}",
+            "comment": "{color.dark.black.thirtyEight.comment}"
           },
           "hover-fg": {
             "value": "{color.light.grey.darker.value}"

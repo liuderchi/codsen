@@ -71,6 +71,10 @@
         "twentyFive": {
           "value": "#404040",
           "comment": "25%"
+        },
+        "thirtyEight": {
+          "value": "#404040",
+          "comment": "38% - darkest on surface to satisfy AA+"
         }
       },
       "red": {

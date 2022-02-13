@@ -43,7 +43,7 @@ export default function IndexRoute() {
   return (
     <div>
       <p>
-        <Link to="/os/play/json-variables">json-variables playground</Link>
+        <Link to="/os/json-variables/try">json-variables playground</Link>
       </p>
       <p>
         <ul>

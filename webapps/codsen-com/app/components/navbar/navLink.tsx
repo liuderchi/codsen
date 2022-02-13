@@ -4,11 +4,13 @@ import { useMatch, useResolvedPath } from "react-router-dom";
 
 interface NavLinkInterface extends LinkProps {
   globalNavPath?: string;
+  active?: boolean;
 }
 
 export const NavLink = ({
   children,
   to,
+  active = false,
   globalNavPath,
   ...props
 }: NavLinkInterface) => {

@@ -9,9 +9,6 @@ import invariant from "tiny-invariant";
 
 // -----------------------------------------------------------------------------
 
-import { action as rootAction } from "~/root";
-export const action = rootAction;
-
 type LoaderData = {
   article: Article;
 };
@@ -20,6 +17,10 @@ export const loader: AppLoader<{ slug: string }> = async ({ params }) => {
   const { slug } = params;
   invariant(slug, `Post slug ${slug} is missing`);
   const article = await getArticle(slug);
+
+  if (!article) {
+    throw new Response("Not Found", { status: 404 });
+  }
 
   const data: LoaderData = { article };
 

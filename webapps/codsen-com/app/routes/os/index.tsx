@@ -9,6 +9,7 @@ import { CodsenOK } from "../../components/svg/codsen-ok";
 import { CodsenWow } from "../../components/svg/codsen-wow";
 import { CodsenHandshake } from "../../components/svg/codsen-handshake";
 import { Codsen1 } from "~/components/svg/codsen-1";
+import { Breadcrumb } from "~/components/breadcrumb/breadcrumb";
 
 // -----------------------------------------------------------------------------
 
@@ -178,12 +179,6 @@ export default function IndexRoute() {
 
       <br />
 
-      {/* <div className="separator" role="presentation">
-        <CodsenStarSmall />
-        <Codsen2 />
-        <CodsenStarLarge />
-      </div> */}
-
       <OSHeading idName="flagship">Flagship Libraries</OSHeading>
       <OSBody libArray={flagshipLibs}>
         These are the largest and the most complex programs here. Many smaller
@@ -218,8 +213,8 @@ export default function IndexRoute() {
       <BackToTop />
 
       <div className="separator" role="presentation">
-        <CodsenMr />
-        <CodsenStarSmall />
+        <Codsen2 />
+        <CodsenWow />
       </div>
 
       <OSHeading idName="html" count={htmlLibs.length}>
@@ -250,8 +245,7 @@ export default function IndexRoute() {
       <BackToTop />
 
       <div className="separator" role="presentation">
-        <Codsen2 />
-        <CodsenWow />
+        <CodsenStarSmall />
       </div>
 
       <OSHeading idName="string" count={stringLibs.length}>

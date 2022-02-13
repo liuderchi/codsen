@@ -1,59 +1,50 @@
-import { json, useParams, useLoaderData, Link } from "remix";
+import { json, useParams, useLoaderData, useLocation, Link } from "remix";
 import type { LoaderFunction, ActionFunction } from "remix";
+import { themeSessionResolver } from "~/utils/theme.server";
 import { getQuasiRandom } from "~/utils/getQuasiRandom";
-import { packages } from "@codsen/data";
-import { useMdxComponent } from "~/utils/mdx";
 import { getReadme } from "~/utils/content.server";
-import usePrefersColorScheme from "use-prefers-color-scheme";
+import { useMdxComponent } from "~/utils/mdx";
+import { packages } from "@codsen/data";
+import invariant from "tiny-invariant";
+import { useTheme } from "remix-themes";
+import { Breadcrumb } from "~/components/breadcrumb/breadcrumb";
 
 // -----------------------------------------------------------------------------
 
-import { unencryptedSession } from "~/sessions.server";
-
-export const action: ActionFunction = async ({ request }) => {
-  let session = await unencryptedSession.getSession(
-    request.headers.get("Cookie")
-  );
-  let formData = new URLSearchParams(await request.text());
-  let theme = formData.get("theme") || "auto";
-  session.set("theme", theme);
-  return json(null, {
-    headers: {
-      "Set-Cookie": await unencryptedSession.commitSession(session),
-    },
-  });
-};
-
 export const loader: LoaderFunction = async ({ request, params }) => {
-  console.log(`${`\u001b[${33}m${`Loader of $packageId.tsx`}\u001b[${39}m`}`);
   if (!params.packageId || !packages.all.includes(params.packageId as any)) {
     throw new Response("Not Found", {
       status: 404,
     });
   }
-
-  let session = await unencryptedSession.getSession(
-    request.headers.get("Cookie")
-  );
-  let theme = session.get("theme") || "auto";
+  const { getTheme } = await themeSessionResolver(request);
   const slug = params.packageId;
   const readme = await getReadme(slug);
-
-  return { theme, readme };
+  return { theme: getTheme(), readme };
 };
 
 // -----------------------------------------------------------------------------
 
 export default function PackageRoute() {
-  const { theme, readme } = useLoaderData();
+  const { readme } = useLoaderData();
+  const [theme] = useTheme();
+
   const { title, date, code } = readme;
   const Component = useMdxComponent(code);
 
   const params = useParams();
 
+  const green = theme === "light" ? "63ffbd" : "dedede";
+  const labelColor = theme === "light" ? "000" : "fff";
+
+  invariant(params.packageId);
+
+  // ---
+
   const currIdInAllPackagesList = packages.all.indexOf(params.packageId as any);
   const quasiRandomArr = getQuasiRandom(packages.all.length);
   const currIdInRandomArray = quasiRandomArr.indexOf(currIdInAllPackagesList);
+
   // use modulus to cycle within array
   const nextIdInRandomArray =
     quasiRandomArr[(currIdInRandomArray + 1) % packages.all.length];
@@ -61,26 +52,24 @@ export default function PackageRoute() {
     quasiRandomArr[
       (currIdInRandomArray - 1 + packages.all.length) % packages.all.length
     ];
+  invariant(nextIdInRandomArray);
+  invariant(prevIdInRandomArray);
 
-  let prefersLight = false;
+  // ---
 
-  if (typeof document !== "undefined") {
-    prefersLight = usePrefersColorScheme() === "light";
-  }
-
-  const green =
-    theme === "light" || (prefersLight && theme !== "dark")
-      ? "63ffbd"
-      : "3084c9";
-  const labelColor =
-    theme === "light" || (prefersLight && theme !== "dark") ? "000" : "fff";
+  let location = useLocation();
 
   return (
     <>
-      <div>
-        <Link to={`/os/${packages.all[prevIdInRandomArray]}`}>Prev</Link> -{" "}
-        <Link to={`/os/${packages.all[nextIdInRandomArray]}`}>Next</Link>
-      </div>
+      <Breadcrumb
+        prevUrl={`/os/${packages.all[prevIdInRandomArray]}`}
+        prevLabel="prev"
+        prevAriaLabel="previous random package"
+        nextUrl={`/os/${packages.all[nextIdInRandomArray]}`}
+        nextLabel="next"
+        nextAriaLabel="next random package"
+        currentPath={location.pathname}
+      />
       <div className="heading">
         <h1>
           {params.packageId}

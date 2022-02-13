@@ -59,7 +59,10 @@
 }
 
 /* ----------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------- */
 html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 62.5%;
   /* 1rem = 10px */
@@ -134,7 +137,7 @@ input:where([type="search"]) {
 }
 
 .separator {
-  margin: 6rem 0;
+  margin: 2rem 0 4rem;
   text-align: center;
   display: flex;
   align-items: center;
@@ -284,7 +287,7 @@ body {
 }
 @media (min-width: 1000px) {
   .remix-app__main h1 sup {
-    top: -6em;
+    top: -5.5em;
     right: 2em;
   }
 }
@@ -354,11 +357,14 @@ header {
 }
 
 .remix-app__main {
+  /* needed for breadcrumbs component, to position */
+  /* left-right arrows: */
+  position: relative;
   flex: 1;
 }
 @media (min-width: 550px) {
   .remix-app__main {
-    padding: 1.5rem;
+    padding: 0 1.5rem 1.5rem;
   }
 }
 
@@ -424,14 +430,24 @@ header {
 
 .remix-app__theme-toggle {
   float: left;
+  position: absolute;
 }
-.remix-app__theme-toggle > div {
-  display: inline;
+.remix-app__theme-toggle button {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: block;
+  width: 4.4rem;
+  height: 4.4rem;
+  cursor: pointer;
 }
-@media (min-width: 1100px) {
-  .remix-app__theme-toggle {
-    position: absolute;
-  }
+
+#svg-theme-toggle #svg-feather-outline {
+  display: none;
+}
+#svg-theme-toggle:hover #svg-feather-outline {
+  display: block;
 }
 
 /* Fonts */
@@ -445,7 +461,7 @@ h1,
   font-size: 5.82rem;
   /* 0.6x */
   line-height: 1;
-  margin-top: 6rem;
+  margin-top: 4rem;
   /* was 7.8rem */
   margin-bottom: 3rem;
   /* was 7.8rem */
@@ -464,16 +480,12 @@ h1,
     font-size: 9.7rem;
   }
 }
-.layout-page h1, .layout-list h1,
-.layout-page .h1,
-.layout-list .h1 {
+.page-os-exactly h1, .page-articles-exactly h1, .page-about-exactly h1, .page-s-exactly h1,
+.page-os-exactly .h1,
+.page-articles-exactly .h1,
+.page-about-exactly .h1,
+.page-s-exactly .h1 {
   margin-top: 7.8rem;
-  margin-bottom: 3.9rem;
-}
-.page-articles-home h1,
-.page-articles-home .h1 {
-  /* there's pagination under h1 in /articles/ so reduce the gap: */
-  margin-bottom: 1.9rem;
 }
 
 h2,
@@ -655,9 +667,9 @@ sub {
 .page-articles .content aside {
     display: inline-block;
     text-align: right;
-    letter-spacing: 0.2em;
+    font-size: 1.4rem;
+    letter-spacing: 0.5rem;
     line-height: 1.1;
-    transition: color 0.3s;
     text-transform: uppercase;
     max-width: 29.7rem;
     margin-top: 2rem;
@@ -671,30 +683,36 @@ sub {
     list-style-type: none;
     padding: 0;
     margin: 0 -1rem 0 0;
-    font-size: 1.4rem;
   }
   .page-os .content aside ul a,
 .page-articles .content aside ul a {
     display: inline-block;
     padding: 0.9rem 1rem;
     color: var(--c-color-semantic-aside-link-default);
+    transition: all 0.3s;
     position: relative;
+  }
+  .page-os .content aside ul a:after,
+.page-articles .content aside ul a:after {
+    content: "";
+    width: 2rem;
+    height: 0.5rem;
+    display: block;
+    background-color: transparent;
+    position: absolute;
+    top: 40%;
+    right: -2rem;
   }
   .page-os .content aside ul a:hover,
 .page-articles .content aside ul a:hover {
     text-decoration: none !important;
     color: var(--c-color-semantic-aside-link-hover-fg);
+    transition: all 0.3s;
   }
   .page-os .content aside ul a:hover:after,
 .page-articles .content aside ul a:hover:after {
-    content: "";
-    display: block;
-    width: 2rem;
-    height: 0.5rem;
     background-color: var(--c-color-semantic-link-hover-bg);
-    position: absolute;
-    top: 40%;
-    right: -2rem;
+    transition: all 0.3s;
   }
   .page-os .content aside ul a.selected,
 .page-articles .content aside ul a.selected {
@@ -719,23 +737,14 @@ sub {
 
 /* Theme-specific overrides  */
 /* ----------------------------------------------------------------------------- */
-.badges img {
+:root[data-theme=dark] .badges img {
   opacity: 0.8;
   filter: invert(1);
 }
-.badges img:hover {
+:root[data-theme=dark] .badges img:hover {
   opacity: 1;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme=dark]) .emoji {
-    filter: none;
-  }
-  :root:not([data-theme=dark]) .badges img {
-    opacity: 1;
-    filter: none;
-  }
-}
 :root[data-theme=light] .emoji {
   filter: none;
 }
@@ -958,6 +967,91 @@ pre[class*=language-] > code[class*=language-] {
   pointer-events: none;
   line-height: inherit;
   white-space: pre;
+}
+
+/* Breadcrumb */
+/* ----------------------------------------------------------------------------- */
+.arrowContainer a {
+  color: var(--c-color-semantic-aside-link-default);
+}
+.arrowContainer:hover a span {
+  color: #1e1e1e;
+}
+
+.breadcrumb {
+  display: flex;
+  justify-content: space-between;
+  color: var(--c-color-semantic-aside-link-default);
+  /* central breadcrumb */
+}
+.breadcrumb span.breadcrumb {
+  width: 100%;
+  text-align: center;
+  flex: 1;
+  line-height: 1;
+}
+.breadcrumb span.breadcrumb span {
+  width: 100%;
+  display: block;
+}
+.breadcrumb span.breadcrumb span a {
+  color: var(--c-color-semantic-aside-link-default);
+  transition: all 0.3s;
+  display: inline-block;
+  /* it should be 1.6rem all around but we compensate */
+  /* for line-height=1 (which is needed when stacking)*/
+  padding: 1.9rem 1.6rem;
+}
+.breadcrumb span.breadcrumb span a:hover {
+  text-decoration: none;
+  color: var(--c-color-semantic-aside-link-hover-fg);
+}
+.breadcrumb .rightArrow,
+.breadcrumb .leftArrow {
+  font-size: 1.4rem;
+  letter-spacing: 0.5rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  display: flex;
+  width: 12.8rem;
+  height: 8rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 1.6rem;
+}
+.breadcrumb .rightArrow span,
+.breadcrumb .leftArrow span {
+  position: absolute;
+  display: flex;
+  width: 12.8rem;
+  height: 8rem;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+.breadcrumb .rightArrow svg,
+.breadcrumb .leftArrow svg {
+  z-index: 0;
+  position: absolute;
+}
+.breadcrumb .rightArrow {
+  right: -1.5rem;
+}
+.breadcrumb .rightArrow span {
+  padding-right: 1rem;
+}
+:root[data-theme=dark] .breadcrumb .rightArrow:hover {
+  color: black !important;
+}
+.breadcrumb .leftArrow {
+  left: -1.5rem;
+}
+.breadcrumb .leftArrow span {
+  padding-left: 2rem;
+}
+:root[data-theme=dark] .breadcrumb .leftArrow:hover {
+  color: black !important;
 }
 
 /* ETC */

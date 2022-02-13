@@ -23,7 +23,7 @@ server-build/
 build/Release
 public/build/
 dist/
-types/
+packages/*/types/
 app/styles/
 app/components/*/*.css*
 
